@@ -5,7 +5,10 @@
 **Year:** 2025  
 
 ---
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status: Research Prototype](https://img.shields.io/badge/status-research%20prototype-orange.svg)]
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)]
+---
 # 🚀 **1. Project Summary**
 NSLA-v2 is a **neuro-symbolic research prototype** exploring whether *pure logical entailment using Z3* can be used as the core reasoning mechanism for legal tasks such as:
 - contract interpretation,
