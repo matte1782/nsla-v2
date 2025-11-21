@@ -208,5 +208,66 @@ This research report and prototype were created by **Matteo Panzeri**, with assi
 ---
 
 # **Appendix A: Repository Structure**
-(Will be filled after repo finalization.)
+
+The NSLA‑v2 repository is organized as a modular research prototype with clear separation of concerns. Below is an overview of the main directories and files:
+
+### **Root Directory**
+- **`README.md`**: Project overview, motivation, architecture summary, and usage instructions.
+- **`requirements.txt`**: Python dependencies for the entire project.
+- **`benchmark_llm_structured.py`**: Standalone script for benchmarking LLM structured extraction performance.
+- **`test_*.py`**: Standalone test files for isolated component testing (LLM client, prompt loader).
+- **`tmp_*.py`**: Temporary utility scripts for debugging and inspection.
+
+### **`app/`** — Core Application Logic
+Contains the main components of the neuro‑symbolic pipeline:
+- **DSL and Logic**: `logic_dsl.py`, `models.py`, `models_v2.py` — legal domain‑specific language definitions and data models.
+- **Extraction**: `structured_extractor.py` — extracts actors, obligations, and conditions from natural language.
+- **Translation**: `translator.py` — converts DSL to Z3‑compatible logical formulas.
+- **Normalization**: `canonical_rule_utils.py`, `ontology_utils.py` — ensures predicate consistency and type alignment.
+- **Guardrails**: `guardrail_checker.py` — validates DSL programs before Z3 encoding to prevent malformed input.
+- **Pipeline**: `pipeline_v2.py`, `main.py` — orchestrates the end‑to‑end neuro‑symbolic reasoning workflow.
+- **Runtimes**: `judge_runtime.py`, `canonicalizer_runtime.py`, `refinement_runtime.py` — manages different phases of the pipeline.
+- **Feedback & Iteration**: `logic_feedback.py`, `iteration_manager.py`, `history_summarizer.py` — implements refinement loops.
+- **Explanation**: `explanation_synthesizer.py` — generates human‑readable explanations from solver outputs.
+- **Utilities**: `llm_client.py`, `prompt_loader.py`, `config.py`, `checker.py`, `preprocessing.py` — supporting infrastructure.
+- **Templates**: `templates/index.html` — minimal web interface (if applicable).
+
+### **`tests/`** — Comprehensive Test Suite
+Contains unit tests, integration tests, and end‑to‑end validation:
+- **Component tests**: `test_translator_v2.py`, `test_guardrail_checker.py`, `test_logic_feedback.py`, `test_llm_structured.py`, etc.
+- **Runtime tests**: `test_judge_runtime.py`, `test_phase2_runtimes.py`, `test_iteration_manager.py`.
+- **End‑to‑end tests**: `test_end_to_end.py`, `test_phase2_e2e.py`, `test_phase3_e2e.py`.
+- **Golden cases**: `test_nsla_v2_golden_cases.py` — known correct test cases for validation.
+- **Benchmark tests**: `test_benchmark_smoke.py` — performance and correctness checks.
+- **Configuration**: `conftest.py` — shared pytest fixtures and setup.
+
+### **`data/`** — Benchmark Cases and Results
+Stores test cases, evaluation data, and experimental results:
+- **`cases_dev.json`**, **`cases_dev_subset_1_5.json`**: Legal micro‑scenarios for benchmarking.
+- **`case_*.json`**: Individual test case responses.
+- **`results_*.csv`**: Experimental results from different pipeline phases and configurations.
+
+### **`docs/`** — Technical Documentation
+Contains design documents, specifications, and planning materials:
+- **`project.md`**, **`piano_operativo_mvp_llm_smt_nsla_matteo_panzeri.md`**: Project planning and operational notes.
+- **`nsla_v2/`**: Detailed technical documentation including DSL guides, pipeline walkthroughs, test plans, phase reports, and debugging notes.
+
+### **`resources/`** — Prompts, Ontology, and Specifications
+Supporting resources for the pipeline:
+- **`prompts/`**: LLM prompt templates organized by pipeline phase.
+- **`ontology/`**: Legal ontology definitions for structured extraction.
+- **`specs/`**: System specification documents and pipeline walkthroughs.
+
+### **`scripts/`** — Utility Scripts
+Standalone scripts for debugging and manual testing:
+- **`inspect_subset_guardrail.py`**, **`manual_sanity.py`**: Diagnostic tools for pipeline validation.
+
+### **Architecture Rationale**
+The repository structure reflects the modularity principles of the NSLA‑v2 system:
+- **Separation of concerns**: Extraction, DSL, translation, and solving are isolated.
+- **Testability**: Each component has corresponding unit tests.
+- **Documentation**: Technical decisions are recorded in `docs/`.
+- **Reproducibility**: Benchmarks, test cases, and results are versioned.
+
+This organization supports iterative research, debugging, and future extensions.
 
