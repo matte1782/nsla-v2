@@ -315,8 +315,8 @@ Script ausiliari per attività di debugging e ispezione manuale:
 - **`inspect_subset_guardrail.py`**: ispezione di subset di dati con focus sui controlli di guardrail.
 - **`manual_sanity.py`**: test di sanità manuale per verifiche rapide.
 
-### `logs/` (non tracciata)
-Cartella ignorata da Git (vedi `.gitignore`) destinata a contenere log di esecuzione della pipeline. Non è inclusa nel repository per evitare di tracciare file temporanei o sensibili.
+### `logs/` (non versionata)
+Cartella ignorata da Git (vedi `.gitignore`) destinata a contenere log di esecuzione della pipeline. Non è inclusa nel repository per evitare di versionare file temporanei o sensibili.
 
 ## File di Root
 
