@@ -69,9 +69,9 @@ NSLA-v2 implements a **multi-stage neuro-symbolic pipeline** that combines LLM-b
 ┌─────────────────────────────────────────────────────────────────────┐
 │  Phase 2.2: Structured Extraction (LLM → DSL)                      │
 │  → Converts NL to LogicProgram (predicates, axioms, rules, query)  │
-│  → Hydrates ontology (sorts, predicates) from legal_it_v1.yaml     │
+│  → Hydrates ontology from resources/ontology/legal_it_v1.yaml      │
 │  → Module: structured_extractor.py                                 │
-│  → DSL spec: logic_dsl.py (v2.1)                                   │
+│  → DSL spec: logic_dsl.py (version 2.1)                            │
 └──────────────────────┬──────────────────────────────────────────────┘
                        ↓
 ┌─────────────────────────────────────────────────────────────────────┐
