@@ -50,36 +50,143 @@ This insight allowed us to pivot toward more promising research directions.
 
 ---
 
-# 🏗️ **3. System Architecture**
-The NSLA-v2 architecture is modular, deterministic, and research-oriented.
+# 🏗️ **3. Architecture / System Design**
 
-### **Pipeline Overview**
+NSLA-v2 implements a **multi-stage neuro-symbolic pipeline** that combines LLM-based structured extraction with formal reasoning via Z3. The architecture is modular, testable, and designed for failure analysis—critical for understanding the limits of SMT-based legal reasoning.
+
+### **Pipeline Flow**
 ```
-Input Text
-   ↓
-Structured Extraction
-   ↓
-Legal DSL
-   ↓
-Normalization
-   ↓
-Guardrail Checks
-   ↓
-Z3 Encoding
-   ↓
-SMT Solve → SAT / UNSAT / Model
-   ↓
-Feedback Loop
+┌─────────────────────────────────────────────────────────────────────┐
+│  Input: Legal Question (Natural Language)                          │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  Phase 2.1: Canonicalization (LLM)                                 │
+│  → Extracts domain, concepts, unmapped terms                       │
+│  → Module: canonicalizer_runtime.py                                │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  Phase 2.2: Structured Extraction (LLM → DSL)                      │
+│  → Converts NL to LogicProgram (predicates, axioms, rules, query)  │
+│  → Hydrates ontology (sorts, predicates) from legal_it_v1.yaml     │
+│  → Module: structured_extractor.py                                 │
+│  → DSL spec: logic_dsl.py (v2.1)                                   │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  Phase 2.3: Refinement (LLM feedback loop)                         │
+│  → Receives Z3 feedback from v1 program                            │
+│  → Generates refined LogicProgram v2 + final_answer                │
+│  → Module: refinement_runtime.py                                   │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  Phase 2.4: Guardrail Checker                                      │
+│  → Validates DSL version, predicate arities, sort compatibility    │
+│  → Prevents malformed programs from reaching translator            │
+│  → Module: guardrail_checker.py                                    │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  Translator + Z3 Solver                                            │
+│  → Encodes DSL into Z3 constraints (sorts → DatatypeSort)          │
+│  → Builds solver with axioms, rules, query                         │
+│  → Module: translator.py (DSL21Parser)                             │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  Z3 Solver Result → Logic Feedback                                 │
+│  → Status: consistent_entails | consistent_no_entailment |         │
+│             inconsistent                                            │
+│  → Missing links, conflicting axioms, human summary                │
+│  → Module: logic_feedback.py                                       │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  Phase 2.5: Explanation Synthesis                                  │
+│  → Generates human-readable explanation from feedback              │
+│  → Module: explanation_synthesizer.py                              │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  (Optional) Phase 3: Iterative Refinement                          │
+│  → Bounded loop: LLM ↔ Z3 feedback (max_iters configurable)       │
+│  → Selects best iteration by heuristic (status priority)           │
+│  → Module: iteration_manager.py                                    │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────────────────────────┐
+│  (Optional) Phase 4: Judge-LLM Evaluation                          │
+│  → Compares baseline vs. NSLA-v2 answer against reference          │
+│  → Module: judge_runtime.py                                        │
+└──────────────────────┬──────────────────────────────────────────────┘
+                       ↓
+                  Final Output
 ```
 
-### **Key Components**
-- `structured_extractor/` → parses text into structured entities
-- `dsl/` → legal DSL definitions and syntax rules
-- `normalizer/` → predicate normalization, arity checks, type control
-- `guardrail/` → blocks malformed DSL programs
-- `translator_z3/` → logical encoding for Z3
-- `pipeline_iterative/` → multi-stage reasoning + refinement
-- `tests/` → rigorous test suite
+### **Module-to-Stage Mapping**
+
+| **Pipeline Stage**          | **Module/File**                      | **Key Responsibilities**                                                                 |
+|-----------------------------|--------------------------------------|------------------------------------------------------------------------------------------|
+| **Orchestration**           | `pipeline_v2.py`                     | Coordinates all phases, manages LLM status, fact synthesis, program sanitization        |
+| **DSL Specification**       | `logic_dsl.py`                       | Defines canonical sorts (Debitore, Contratto, etc.), predicates, DSL version (2.1)      |
+| **Ontology Utilities**      | `ontology_utils.py`                  | Resolves predicate/sort aliases (e.g., "Soggetto obbligato" → "Debitore")               |
+| **Canonicalization**        | `canonicalizer_runtime.py`           | Phase 2.1: Domain extraction, concept identification                                     |
+| **Structured Extraction**   | `structured_extractor.py`            | Phase 2.2: NL → LogicProgram, hydrates sorts/predicates from ontology                    |
+| **Refinement**              | `refinement_runtime.py`              | Phase 2.3: Iterative LLM refinement using Z3 feedback                                    |
+| **Guardrail**               | `guardrail_checker.py`               | Phase 2.4: Static validation (DSL version, arity, sorts)                                 |
+| **Z3 Translation**          | `translator.py`                      | Encodes DSL into Z3 (DSL21Parser), builds solver, handles fact synthesis                |
+| **Logic Feedback**          | `logic_feedback.py`                  | Interprets Z3 results (sat/unsat/unknown) into actionable feedback                      |
+| **Explanation**             | `explanation_synthesizer.py`         | Phase 2.5: Generates human-readable summaries                                            |
+| **Iteration Manager**       | `iteration_manager.py`               | Phase 3: Bounded refinement loop with state tracking                                     |
+| **Judge Metric**            | `judge_runtime.py`                   | Phase 4: LLM-based evaluation of baseline vs. NSLA-v2 answers                           |
+| **Canonical Rules**         | `canonical_rule_utils.py`            | Ensures query rules follow DSL conventions                                               |
+| **Data Models**             | `models.py`, `models_v2.py`          | Pydantic schemas: LogicProgram, LLMOutput, IterationState, GuardrailResult, etc.        |
+
+### **Testing & Validation**
+
+The codebase includes comprehensive tests that validate each stage:
+
+- **Unit Tests**: `test_translator_v2.py`, `test_guardrail_checker.py`, `test_structured_extractor_ontology.py`
+- **Integration Tests**: `test_end_to_end.py`, `test_phase2_e2e.py`, `test_phase3_e2e.py`
+- **Golden Cases**: `test_nsla_v2_golden_cases.py` — validates legal reasoning patterns (contractual liability, tort law, usucapion)
+- **Adversarial Tests**: Tests malformed DSL, missing predicates, arity mismatches
+
+Run tests:
+```bash
+pytest -v tests/
+```
+
+### **Research Value & Insights**
+
+This architecture is designed for **failure-driven research**:
+
+1. **Neuro-Symbolic Integration**: Demonstrates how LLMs can interface with formal reasoning (Z3) through a typed DSL, showcasing both strengths (structured extraction) and weaknesses (semantic loss).
+
+2. **Formal Verification Layer**: The guardrail + translator pipeline ensures that only well-formed logical programs reach Z3, making failures attributable to reasoning (not syntax).
+
+3. **Iterative Feedback Loop**: Phase 3 implements a bounded refinement mechanism where Z3 feedback (missing links, conflicts) guides LLM re-generation—a pattern reusable in other symbolic AI domains.
+
+4. **Documented Limitations**: The architecture exposes **why Z3 fails for legal reasoning**:
+   - **Non-monotonicity**: Legal conclusions change with new context; Z3 assumes monotonic logic.
+   - **Semantic loss**: NL → DSL translation strips nuance (intent, context, interpretation).
+   - **Over-specification**: Law tolerates ambiguity; Z3 requires complete, consistent axioms.
+   - **Entailment mismatch**: SAT/UNSAT ≠ legal validity (e.g., contract interpretation involves policy, not pure logic).
+
+5. **Reusable Components**: Despite the theoretical mismatch, the modules (structured extraction, ontology mapping, iterative refinement, guardrails) are **directly applicable** to domains where formal reasoning is viable (e.g., compliance checking, configuration synthesis, protocol verification).
+
+6. **Benchmarking Infrastructure**: The test suite provides reproducible failure cases, enabling future research to measure progress on neuro-symbolic legal reasoning or pivot to better-suited formalisms (e.g., non-monotonic logics, probabilistic reasoning).
+
+### **Why This Design Matters**
+
+For **research recruiters** evaluating this project:
+- This is not a failed product—it's a **successful scientific experiment** that disproves a hypothesis.
+- The architecture demonstrates **systems thinking**: modularity, testability, instrumentation (LLM status tracking, guardrails, feedback loops).
+- The codebase is **publication-ready**: clear separation of concerns, comprehensive tests, documented limitations.
+- The negative result **guides future research**: highlights where symbolic AI needs augmentation (e.g., probabilistic layers, defeasible reasoning, hybrid retrieval).
+
+This project exemplifies the kind of **rigorous, failure-tolerant research** essential for advancing AI in complex, interpretive domains like law.
 
 ---
 
