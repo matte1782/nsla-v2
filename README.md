@@ -148,14 +148,15 @@ NSLA-v2 implements a **multi-stage neuro-symbolic pipeline** that combines LLM-b
 
 The codebase includes comprehensive tests that validate each stage:
 
-- **Unit Tests**: `test_translator_v2.py`, `test_guardrail_checker.py`, `test_structured_extractor_ontology.py`
-- **Integration Tests**: `test_end_to_end.py`, `test_phase2_e2e.py`, `test_phase3_e2e.py`
+- **Unit Tests**: `test_translator_autodeclare.py`, `test_guardrail_checker.py`, `test_structured_extractor_ontology.py`, `test_logic_feedback.py`
+- **Integration Tests**: `test_phase2_e2e.py`, `test_phase3_e2e.py`, `test_phase2_runtimes.py`
 - **Golden Cases**: `test_nsla_v2_golden_cases.py` — validates legal reasoning patterns (contractual liability, tort law, usucapion)
-- **Adversarial Tests**: Tests malformed DSL, missing predicates, arity mismatches
+- **Component Tests**: `test_iteration_manager.py`, `test_explanation_synthesizer.py`, `test_judge_runtime.py`
+- **Smoke Tests**: `test_benchmark_smoke.py` — validates benchmark infrastructure
 
 Run tests:
 ```bash
-pytest -v tests/
+pytest -v
 ```
 
 ### **Research Value & Insights**
