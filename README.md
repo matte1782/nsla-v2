@@ -193,27 +193,57 @@ This project exemplifies the kind of **rigorous, failure-tolerant research** ess
 
 # 📦 **4. Repository Structure**
 ```
-neurosimbolic_project_v2/
-├── src/
-│   ├── dsl/
-│   ├── z3_translator/
-│   ├── pipeline/
-│   ├── guardrail/
-│   └── ...
-├── tests/
-│   ├── unit_tests/
-│   ├── integration_tests/
-│   └── adversarial_tests/
-├── docs/
-│   ├── PAPER_DRAFT_EN.md
-│   ├── PAPER_DRAFT_IT.md
-│   ├── ARCHITECTURE.md
-│   ├── DSL_GUIDE.md
-│   ├── WORKFLOW_CURSOR.md
-│   └── NOTES/
-├── requirements.txt
-├── README.md
-└── LICENSE
+nsla-v2/
+├── app/                           # Main application code (core logic)
+│   ├── templates/                 # Templates for prompts/UI
+│   ├── logic_dsl.py              # DSL specification (v2.1)
+│   ├── translator.py             # Z3 translator (DSL → SMT)
+│   ├── pipeline_v2.py            # Main pipeline orchestration
+│   ├── guardrail_checker.py      # DSL validation & guardrails
+│   ├── structured_extractor.py   # Phase 2.2: NL → DSL
+│   ├── canonicalizer_runtime.py  # Phase 2.1: Domain extraction
+│   ├── refinement_runtime.py     # Phase 2.3: Iterative refinement
+│   ├── explanation_synthesizer.py # Phase 2.5: Human-readable output
+│   ├── iteration_manager.py      # Phase 3: Bounded refinement loop
+│   ├── judge_runtime.py          # Phase 4: LLM-based evaluation
+│   ├── logic_feedback.py         # Z3 result interpretation
+│   ├── ontology_utils.py         # Ontology mapping utilities
+│   ├── models.py / models_v2.py  # Pydantic data models
+│   └── ...                       # Other modules
+├── tests/                         # Comprehensive test suite
+│   ├── test_translator_autodeclare.py    # Unit: Z3 translator
+│   ├── test_guardrail_checker.py         # Unit: Guardrail validation
+│   ├── test_structured_extractor_ontology.py  # Unit: DSL extraction
+│   ├── test_logic_feedback.py            # Unit: Z3 feedback
+│   ├── test_phase2_e2e.py                # Integration: Phase 2
+│   ├── test_phase3_e2e.py                # Integration: Phase 3
+│   ├── test_nsla_v2_golden_cases.py      # Golden test cases
+│   └── ...                               # Other tests
+├── docs/                          # Documentation
+│   └── nsla_v2/                   # Project-specific docs
+│       ├── json/                  # JSON schemas/examples
+│       ├── reports/               # Analysis reports
+│       ├── dsl_nsla_v_2_1.md     # DSL guide
+│       ├── logic_dsl_v2.md       # DSL specification
+│       ├── nsla_v_2_phase_3_pipeline.md  # Phase 3 design
+│       └── ...                    # Other documentation
+├── data/                          # Test cases & benchmark results
+│   ├── cases_dev.json            # Development test cases
+│   └── results_*.csv             # Benchmark outputs
+├── resources/                     # Static resources
+│   ├── ontology/                 # Legal domain ontology
+│   │   └── legal_it_v1.yaml     # Italian legal ontology
+│   ├── prompts/                  # LLM prompt templates
+│   │   ├── phase3/              # Phase 3 prompts
+│   │   └── judge/               # Judge LLM prompts
+│   └── specs/                    # Formal specifications
+├── scripts/                       # Utility scripts
+│   ├── inspect_subset_guardrail.py
+│   └── manual_sanity.py
+├── requirements.txt               # Python dependencies
+├── README.md                      # This file
+├── nsla_v2_paper_en.md           # Research paper (English)
+└── nsla_v2_paper_it.md           # Research paper (Italian)
 ```
 
 ---
