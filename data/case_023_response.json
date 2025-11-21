@@ -1,0 +1,373 @@
+{
+  "mode": "v2_single",
+  "final_answer": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?'.\n\nRequisiti simbolici soddisfatti: PossessoContinuato, BuonaFede, TitoloIdoneo, HaObbligo, Inadempimento, DannoPatrimoniale, CausaNonImputabile, UsucapioneAbbreviata, ResponsabilitaContrattuale.",
+  "logic_program": {
+    "dsl_version": "2.1",
+    "sorts": {
+      "Debitore": {
+        "type": "Entity"
+      },
+      "Creditore": {
+        "type": "Entity"
+      },
+      "Contratto": {
+        "type": "Entity"
+      },
+      "Soggetto": {
+        "type": "Entity"
+      },
+      "BeneRegistrato": {
+        "type": "Entity"
+      },
+      "Titolo": {
+        "type": "Entity"
+      },
+      "Bene": {
+        "type": "Entity"
+      }
+    },
+    "constants": {
+      "deb": {
+        "sort": "Debitore"
+      },
+      "cred": {
+        "sort": "Creditore"
+      },
+      "contr": {
+        "sort": "Contratto"
+      },
+      "sog": {
+        "sort": "Soggetto"
+      },
+      "beneReg": {
+        "sort": "BeneRegistrato"
+      },
+      "titolo": {
+        "sort": "Titolo"
+      }
+    },
+    "predicates": {
+      "PossessoContinuato": {
+        "arity": 2,
+        "sorts": [
+          "Soggetto",
+          "Bene"
+        ]
+      },
+      "BuonaFede": {
+        "arity": 1,
+        "sorts": [
+          "Soggetto"
+        ]
+      },
+      "TitoloIdoneo": {
+        "arity": 2,
+        "sorts": [
+          "Titolo",
+          "BeneRegistrato"
+        ]
+      },
+      "UsucapioneAbbreviata": {
+        "arity": 2,
+        "sorts": [
+          "Soggetto",
+          "BeneRegistrato"
+        ]
+      },
+      "HaObbligo": {
+        "arity": 3,
+        "sorts": [
+          "Debitore",
+          "Creditore",
+          "Contratto"
+        ]
+      },
+      "Inadempimento": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      },
+      "DannoPatrimoniale": {
+        "arity": 1,
+        "sorts": [
+          "Soggetto"
+        ]
+      },
+      "CausaNonImputabile": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      },
+      "ResponsabilitaContrattuale": {
+        "arity": 3,
+        "sorts": [
+          "Debitore",
+          "Creditore",
+          "Contratto"
+        ]
+      }
+    },
+    "facts": {},
+    "axioms": [
+      {
+        "formula": "PossessoContinuato(sog, beneReg)"
+      },
+      {
+        "formula": "BuonaFede(sog)"
+      },
+      {
+        "formula": "TitoloIdoneo(titolo, beneReg)"
+      },
+      {
+        "formula": "HaObbligo(deb, cred, contr)"
+      },
+      {
+        "formula": "Inadempimento(deb, contr)"
+      },
+      {
+        "formula": "DannoPatrimoniale(sog)"
+      },
+      {
+        "formula": "CausaNonImputabile(deb, contr)"
+      }
+    ],
+    "rules": [
+      {
+        "condition": "(and PossessoContinuato(sog, beneReg) BuonaFede(sog) TitoloIdoneo(titolo, beneReg))",
+        "conclusion": "UsucapioneAbbreviata(sog, beneReg)",
+        "id": null
+      },
+      {
+        "condition": "(and HaObbligo(deb, cred, contr) Inadempimento(deb, contr) DannoPatrimoniale(cred) (not CausaNonImputabile(deb, contr)))",
+        "conclusion": "ResponsabilitaContrattuale(deb, cred, contr)",
+        "id": null
+      }
+    ],
+    "query": "ResponsabilitaContrattuale(deb, cred, contr)"
+  },
+  "feedback": {
+    "status": "consistent_no_entailment",
+    "missing_links": [
+      "HaObbligo",
+      "Inadempimento",
+      "DannoPatrimoniale",
+      "CausaNonImputabile"
+    ],
+    "conflicting_axioms": [],
+    "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+  },
+  "phase2": {
+    "canonicalization": {
+      "question": "Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?",
+      "language": "it",
+      "domain": "civil_law_contractual_liability",
+      "concepts": [],
+      "unmapped_terms": []
+    },
+    "logic_program_v1": {
+      "dsl_version": "2.1",
+      "sorts": {
+        "Debitore": {
+          "type": "Entity"
+        },
+        "Creditore": {
+          "type": "Entity"
+        },
+        "Contratto": {
+          "type": "Entity"
+        },
+        "Soggetto": {
+          "type": "Entity"
+        },
+        "BeneRegistrato": {
+          "type": "Entity"
+        },
+        "Titolo": {
+          "type": "Entity"
+        },
+        "Bene": {
+          "type": "Entity"
+        }
+      },
+      "constants": {
+        "deb": {
+          "sort": "Debitore"
+        },
+        "cred": {
+          "sort": "Creditore"
+        },
+        "contr": {
+          "sort": "Contratto"
+        },
+        "sog": {
+          "sort": "Soggetto"
+        },
+        "beneReg": {
+          "sort": "BeneRegistrato"
+        },
+        "titolo": {
+          "sort": "Titolo"
+        }
+      },
+      "predicates": {
+        "PossessoContinuato": {
+          "arity": 2,
+          "sorts": [
+            "Soggetto",
+            "Bene"
+          ]
+        },
+        "BuonaFede": {
+          "arity": 1,
+          "sorts": [
+            "Soggetto"
+          ]
+        },
+        "TitoloIdoneo": {
+          "arity": 2,
+          "sorts": [
+            "Titolo",
+            "BeneRegistrato"
+          ]
+        },
+        "UsucapioneAbbreviata": {
+          "arity": 2,
+          "sorts": [
+            "Soggetto",
+            "BeneRegistrato"
+          ]
+        },
+        "HaObbligo": {
+          "arity": 3,
+          "sorts": [
+            "Debitore",
+            "Creditore",
+            "Contratto"
+          ]
+        },
+        "Inadempimento": {
+          "arity": 2,
+          "sorts": [
+            "Debitore",
+            "Contratto"
+          ]
+        },
+        "DannoPatrimoniale": {
+          "arity": 1,
+          "sorts": [
+            "Soggetto"
+          ]
+        },
+        "CausaNonImputabile": {
+          "arity": 2,
+          "sorts": [
+            "Debitore",
+            "Contratto"
+          ]
+        },
+        "ResponsabilitaContrattuale": {
+          "arity": 3,
+          "sorts": [
+            "Debitore",
+            "Creditore",
+            "Contratto"
+          ]
+        }
+      },
+      "facts": {},
+      "axioms": [
+        {
+          "formula": "PossessoContinuato(sog, beneReg)"
+        },
+        {
+          "formula": "BuonaFede(sog)"
+        },
+        {
+          "formula": "TitoloIdoneo(titolo, beneReg)"
+        },
+        {
+          "formula": "HaObbligo(deb, cred, contr)"
+        },
+        {
+          "formula": "Inadempimento(deb, contr)"
+        },
+        {
+          "formula": "DannoPatrimoniale(sog)"
+        },
+        {
+          "formula": "CausaNonImputabile(deb, contr)"
+        }
+      ],
+      "rules": [
+        {
+          "condition": "(and PossessoContinuato(sog, beneReg) BuonaFede(sog) TitoloIdoneo(titolo, beneReg))",
+          "conclusion": "UsucapioneAbbreviata(sog, beneReg)",
+          "id": null
+        },
+        {
+          "condition": "(and HaObbligo(deb, cred, contr) Inadempimento(deb, contr) DannoPatrimoniale(cred) (not CausaNonImputabile(deb, contr)))",
+          "conclusion": "ResponsabilitaContrattuale(deb, cred, contr)",
+          "id": null
+        }
+      ],
+      "query": "ResponsabilitaContrattuale(deb, cred, contr)"
+    },
+    "feedback_v1": {
+      "status": "consistent_no_entailment",
+      "missing_links": [
+        "HaObbligo",
+        "Inadempimento",
+        "DannoPatrimoniale",
+        "CausaNonImputabile"
+      ],
+      "conflicting_axioms": [],
+      "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+    },
+    "answer_v1": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?'."
+  },
+  "guardrail": {
+    "ok": true,
+    "issues": []
+  },
+  "explanation": {
+    "summary": "Il programma logico \u00e8 coerente ma non implica ancora la conclusione. Mancano collegamenti o premesse aggiuntive. Feedback sintetico: Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile.",
+    "status": "consistent_no_entailment",
+    "details": {
+      "question": "Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?",
+      "final_answer": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?'.\n\nRequisiti simbolici soddisfatti: PossessoContinuato, BuonaFede, TitoloIdoneo, HaObbligo, Inadempimento, DannoPatrimoniale, CausaNonImputabile, UsucapioneAbbreviata, ResponsabilitaContrattuale.",
+      "missing_links": [
+        "HaObbligo",
+        "Inadempimento",
+        "DannoPatrimoniale",
+        "CausaNonImputabile"
+      ],
+      "conflicting_axioms": []
+    }
+  },
+  "structured_stats": {
+    "predicates_total": 9,
+    "rules_total": 2
+  },
+  "llm_status": {
+    "Canonicalizer": "ok",
+    "Structured Extractor": "ok",
+    "Refinement LLM": "ok"
+  },
+  "judge": {
+    "question": "Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?",
+    "reference_answer": "Servono tre anni di possesso continuato e pubblico in buona fede con titolo idoneo regolarmente trascritto; altrimenti vale il termine ordinario ventennale.",
+    "answer_a": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?'.",
+    "answer_b": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?'.\n\nRequisiti simbolici soddisfatti: PossessoContinuato, BuonaFede, TitoloIdoneo, HaObbligo, Inadempimento, DannoPatrimoniale, CausaNonImputabile, UsucapioneAbbreviata, ResponsabilitaContrattuale.",
+    "label_a": "baseline_v1",
+    "label_b": "nsla_v2",
+    "vote": "tie",
+    "confidence": 0.0,
+    "rationale": "Judge metric disabled."
+  },
+  "fallback_used": false,
+  "fallback_feedback": null
+}

@@ -1,0 +1,33 @@
+[
+  {
+    "id": "case_001",
+    "tags": ["contrattuale", "formazione_contratto"],
+    "question": "Quali sono gli elementi costitutivi di un contratto valido secondo il diritto italiano?",
+    "gold_answer": "Un contratto è valido solo se sussistono cinque requisiti fondamentali: accordo tra le parti, causa lecita, oggetto possibile lecito e determinato, e osservanza della forma prescritta dalla legge quando richiesta. La mancanza anche di uno solo di tali elementi determina la nullità dell'atto."
+  },
+  {
+    "id": "case_002",
+    "tags": ["responsabilita_civile", "colpa"],
+    "question": "Quando si configura la responsabilità civile per colpa?",
+    "gold_answer": "La responsabilità civile per colpa si configura quando il soggetto viola un dovere di diligenza, provoca un danno ingiusto e tra condotta ed evento si accerta il nesso causale. I tre elementi devono concorrere congiuntamente."
+  },
+  {
+    "id": "case_003",
+    "tags": ["obbligazioni", "inadempimento"],
+    "question": "Che differenza c'è tra inadempimento e ritardo nell'adempimento di un'obbligazione?",
+    "gold_answer": "L'inadempimento è la mancata esecuzione definitiva della prestazione dovuta, mentre il semplice ritardo è un adempimento tardivo che può essere sanato se il creditore lo accetta e non subisce pregiudizi essenziali."
+  },
+  {
+    "id": "case_004",
+    "tags": ["illecito_civile", "risarcimento_danno"],
+    "question": "Quali sono i presupposti per il risarcimento del danno da fatto illecito?",
+    "gold_answer": "Il risarcimento per fatto illecito richiede la combinazione di un comportamento antigiuridico, un danno ingiusto e il nesso causale che collega la condotta all'evento lesivo, oltre alla prova dell'ammontare del pregiudizio."
+  },
+  {
+    "id": "case_005",
+    "tags": ["contrattuale", "contratto_adesione"],
+    "question": "Cosa si intende per contratto di adesione?",
+    "gold_answer": "Per contratto di adesione si intende l'accordo predisposto unilateralmente da una parte, spesso professionista, al quale l'altra parte può soltanto aderire integralmente senza poter negoziare clausole singole."
+  }
+]
+

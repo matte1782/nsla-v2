@@ -1,0 +1,184 @@
+{
+  "canonicalizer_agent_vFinal": {
+    "audit_report": {
+      "issues_detected": [
+        "Validation and error-handling logic were only implicit, not defined as explicit, named components.",
+        "No explicit rules for detecting and filtering penal / extra-contractual expressions (e.g., 'responsabilità penale', 'illecito extracontrattuale').",
+        "No explicit description of morphological normalization (singular/plural, verb inflections, orthographic variants).",
+        "Determinism parameters (similarity algorithm, thresholds) were not fixed, leaving room for non-reproducible behavior.",
+        "Minor lexical issues in examples (e.g., typos in 'diligenza')."
+      ],
+      "ontology_alignment_problems": [
+        "The previous spec did not explicitly state that examples like 'EsisteContratto' (present in DSL docs) must NOT be produced if they do not appear in ontology/legal_it_v1.yaml.",
+        "It was not clearly enforced that all predicates in the canonicalizer output must belong to the closed set defined in ontology/legal_it_v1.yaml."
+      ],
+      "dsl_conflicts": [
+        "The previous spec did not explicitly tie the canonicalizer to the closed predicate vocabulary required by DSL v2.1.",
+        "Compatibility of the canonical output with the DSL v2.1 JSON structure (facts/rules) was implied but not clearly spelled out."
+      ],
+      "missing_components": [
+        "An explicit validation_logic section describing arity, domain and sort checks.",
+        "An explicit error_handling section separating unknown, out_of_scope and low_confidence cases.",
+        "A precise NLP pipeline description including morphological normalization and multi-token expression handling.",
+        "Deterministic ambiguity resolution rules and prioritization for overlapping concepts."
+      ],
+      "recommended_fixes": [
+        "Add a clear nlp_pipeline section with all steps: PreProcessing → ConceptExtraction → SynonymLookup → CanonicalMatching → AmbiguityResolution → Validation → Scoring → Output.",
+        "Add an explicit validation_logic section describing ontology membership, domain filtering, and arity awareness.",
+        "Add an explicit error_handling section differentiating unknown, out_of_scope and low_confidence mappings.",
+        "Hard-constrain the canonicalizer to use only predicates from ontology/legal_it_v1.yaml, ignoring example predicates from DSL docs that are not in the ontology.",
+        "Fix similarity and threshold parameters (e.g., Jaro–Winkler, SIM_THRESHOLD = 0.85) to guarantee determinism.",
+        "Clean up examples and terminology for internal consistency (e.g., 'diligenza')."
+      ]
+    },
+    "final_spec": {
+      "overview": "The Legal Question Ontology Canonicalizer is a deterministic component that receives an Italian legal question about contractual liability and returns a structured mapping from natural language phrases to canonical predicates defined in ontology/legal_it_v1.yaml. It serves as the front-end bridge between free-form user questions and the NSLA v2 logic DSL, ensuring that only canonical, ontology-aligned predicates (e.g., Inadempimento, ResponsabilitaContrattuale, DannoPatrimoniale) enter the symbolic layer. The canonicalizer is strictly limited to the civil law contractual liability domain and provides explicit handling for unknown and out-of-scope concepts.",
+      "components": [
+        {
+          "name": "PreProcessing",
+          "description": "Normalizes the input question (lowercasing, Unicode normalization, removal of non-essential punctuation) and performs basic Italian NLP analysis (tokenization, lemmatization, optional POS/dependency tags). Handles morphological variants (singular/plural, verb inflections) to ease matching against ontology synonyms."
+        },
+        {
+          "name": "ConceptExtraction",
+          "description": "Extracts candidate textual segments that may correspond to legal concepts, using ontology-driven keyword lists and simple syntactic patterns (e.g., noun phrases, multi-word expressions such as 'mancato adempimento', 'risarcimento del danno', 'diligenza del buon padre di famiglia')."
+        },
+        {
+          "name": "SynonymLookup",
+          "description": "Builds and uses an inverted synonym table derived strictly from ontology/legal_it_v1.yaml. For each predicate, uses its synonyms (plus the predicate name itself) as possible natural language realizations. No additional synonyms are invented."
+        },
+        {
+          "name": "CanonicalMatcher",
+          "description": "For each candidate term, computes deterministic similarity scores against all ontology synonyms (e.g., using a fixed Jaro–Winkler implementation) and selects candidate predicates whose similarity exceeds a global threshold SIM_THRESHOLD = 0.85."
+        },
+        {
+          "name": "AmbiguityResolver",
+          "description": "Resolves conflicts when multiple predicates reach similar similarity scores for the same term. Uses rule-based, context-aware heuristics (based on surrounding words and other mapped concepts) to pick a single canonical predicate, or marks the mapping as ambiguous when a unique choice is not possible."
+        },
+        {
+          "name": "LegalValidator",
+          "description": "Checks that each resolved canonical_predicate belongs to the closed predicate set from ontology/legal_it_v1.yaml, that it is coherent with the domain (civil_law_contractual_liability) and applies negative filters for penal or extra-contractual vocabulary, marking those segments as out_of_scope."
+        },
+        {
+          "name": "ConfidenceScorer",
+          "description": "Converts raw similarity scores into a normalized confidence in [0, 1] and applies fixed thresholds for classification (high, medium, low). Enforces deterministic thresholds so that the same input always yields the same confidence values."
+        },
+        {
+          "name": "OutputFormatter",
+          "description": "Builds the final JSON object with fields question, language, domain, concepts and unmapped_terms. Annotates each mapped concept with its canonical_predicate, confidence and optional notes (e.g., 'ambiguous', 'low_confidence')."
+        }
+      ],
+      "legal_constraints": [
+        "The canonicalizer operates exclusively in the domain of Italian civil law contractual liability as reflected in ontology/legal_it_v1.yaml.",
+        "It must only output predicates defined in ontology/legal_it_v1.yaml. The predicate vocabulary is closed.",
+        "It must treat penal, extra-contractual, administrative, labor or other non-contractual liability concepts as out_of_scope.",
+        "All mapping decisions must be deterministic: the same input question must always produce the same JSON output.",
+        "The canonical output must be compatible with NSLA DSL v2.1, in particular with the facts and rules structures that will consume these predicates.",
+        "Predicate semantics must respect the legal descriptions in the ontology (e.g., ResponsabilitaContrattuale as contractual liability under art. 1218 c.c., NessoCausale as causal link between inadempimento and damage, etc.)."
+      ],
+      "nlp_pipeline": "1) PreProcessing: normalize case, Unicode, and whitespace; remove non-essential punctuation; run Italian tokenization and lemmatization; optionally POS/dep tagging. 2) Sentence segmentation. 3) ConceptExtraction: generate uni-/bi-/tri-grams and longer phrases guided by ontology synonyms; collect candidate segments such as 'mancato adempimento', 'ritardo nell'esecuzione', 'danno economico', 'danno morale', 'causa di forza maggiore'. 4) SynonymLookup: for each candidate segment, look up ontology synonyms and compute normalized similarity. 5) CanonicalMatching: select candidate predicates whose similarity exceeds SIM_THRESHOLD; keep score information. 6) AmbiguityResolution: when multiple predicates are similarly likely, apply rule-based context heuristics to choose one or mark ambiguity. 7) LegalValidation: filter out-of-domain concepts, ensure predicates exist in ontology, and record arity for downstream use. 8) Scoring: normalize similarity scores and categorize confidence. 9) OutputFormatting: emit the final JSON structure.",
+      "canonical_mapping_rules": "The canonical mapping is governed by the following deterministic rules: (1) Every candidate term is normalized (lowercase, lemmatized, stripped of extra punctuation) before comparison. (2) Similarity is computed using a fixed algorithm (e.g., Jaro–Winkler) with fixed parameters. (3) For each ontology predicate, the term is compared against each of its synonyms plus the predicate name itself. (4) For the term, collect all (predicate, score) where score >= SIM_THRESHOLD = 0.85. (5) If there are no candidates above threshold, the term is marked as unknown. (6) If there is a single candidate with maximal score, that predicate becomes the canonical_predicate. (7) If multiple candidates have scores within AMB_DELTA = 0.05 of the maximum, invoke the AmbiguityResolver; if still unresolved, choose the highest score and mark notes = 'ambiguous'. (8) If domain filters indicate a non-contractual domain (e.g., 'penale', 'reato'), override any candidate mapping and mark the term as out_of_scope. (9) Under no circumstances may the canonicalizer output a predicate that is not defined in ontology/legal_it_v1.yaml.",
+      "ambiguity_resolution": "Ambiguity is resolved by rule-based context inspection: for instance, if 'ritardo' appears together with 'adempimento', 'termine', or 'scadenza', prefer Mora over other predicates; if 'mancato adempimento' or 'violazione del contratto' appear, prefer Inadempimento; if 'danno' appears together with 'economico', 'perdita', 'mancato guadagno', prefer DannoPatrimoniale or LucroCessante; if 'danno morale', 'sofferenza', or similar terms appear, prefer DannoNonPatrimoniale. These rules are applied in a fixed order. If no rule fires, select the predicate with the highest similarity score and mark the mapping as ambiguous.",
+      "validation_logic": "Validation includes: (1) Ontology membership: every canonical_predicate must be a key of ontology.predicates. If not, the term is reclassified as out_of_scope. (2) Domain filtering: if a term or its context includes domain blacklist phrases (e.g., 'penale', 'extracontrattuale', 'reato', 'illecito'), classify as out_of_scope regardless of similarity. (3) Arity awareness: for each mapped predicate, attach its arity from the ontology for downstream DSL construction (even though arguments are not instantiated here). (4) Consistency: if the same textual segment is mapped to different predicates within the same question with widely different confidence values, keep only the mapping with the highest confidence and drop the others.",
+      "error_handling": "The canonicalizer defines three main error categories: (1) unknown: no ontology synonym passes the similarity threshold for a candidate term; add the term to unmapped_terms with reason = 'unknown'. (2) out_of_scope: the term is associated with non-contractual domains or the chosen predicate is not present in the ontology; add to unmapped_terms with reason = 'out_of_scope'. (3) low_confidence: scores slightly below the global threshold (e.g., 0.75–0.85) may optionally be returned as concepts with notes = 'low_confidence', but are recommended to be treated as unknown for the main NSLA pipeline. All these behaviors are implemented with fixed thresholds and rules to preserve determinism.",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "Original legal question in Italian."
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "it"
+            ],
+            "description": "Language code of the question."
+          },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "civil_law_contractual_liability"
+            ],
+            "description": "Legal domain handled by the canonicalizer."
+          },
+          "concepts": {
+            "type": "array",
+            "description": "List of successfully mapped legal concepts.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Text span of the question from which the concept was extracted."
+                },
+                "canonical_predicate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Canonical predicate name from ontology/legal_it_v1.yaml, or null if unavailable."
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0.0,
+                  "maximum": 1.0,
+                  "description": "Normalized confidence score of the mapping."
+                },
+                "notes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Optional flags such as 'ambiguous' or 'low_confidence'."
+                }
+              },
+              "required": [
+                "text",
+                "canonical_predicate",
+                "confidence"
+              ]
+            }
+          },
+          "unmapped_terms": {
+            "type": "array",
+            "description": "List of textual segments that could not be mapped to ontology predicates.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Unmapped text span."
+                },
+                "reason": {
+                  "type": "string",
+                  "enum": [
+                    "unknown",
+                    "out_of_scope"
+                  ],
+                  "description": "Reason why the term was not mapped."
+                }
+              },
+              "required": [
+                "text",
+                "reason"
+              ]
+            }
+          }
+        },
+        "required": [
+          "question",
+          "language",
+          "domain",
+          "concepts",
+          "unmapped_terms"
+        ]
+      },
+      "full_pseudocode": "CONST SIM_THRESHOLD = 0.85\nCONST AMB_DELTA = 0.05\n\nONTOLOGY = load_yaml('legal_it_v1.yaml')\nONTOLOGY_PREDICATES = set(ONTOLOGY['predicates'].keys())\nONTOLOGY_SYNONYMS = build_synonym_table(ONTOLOGY)\nDOMAIN_BLACKLIST = ['penale', 'reato', 'extracontrattuale', 'illecito extracontrattuale', 'amministrativo', 'lavoro', 'previdenziale']\n\nfunction canonicalize_question(question: string) -> object:\n    norm_question = normalize_text(question)\n    tokens, lemmas, pos_tags, deps = nlp_analyze(norm_question)\n\n    candidate_terms = extract_candidate_segments(tokens, lemmas, pos_tags, deps)\n    concepts = []\n    unmapped = []\n\n    for term in candidate_terms:\n        term_norm = normalize_segment(term)\n\n        if is_out_of_domain(term_norm, DOMAIN_BLACKLIST):\n            unmapped.append({ 'text': term, 'reason': 'out_of_scope' })\n            continue\n\n        best_score = 0.0\n        candidate_preds = []  # list of (predicate, score)\n\n        for pred, syn_list in ONTOLOGY_SYNONYMS.items():\n            for syn in syn_list:\n                syn_norm = normalize_segment(syn)\n                score = similarity(term_norm, syn_norm)\n                if score >= SIM_THRESHOLD:\n                    candidate_preds.append((pred, score))\n                    if score > best_score:\n                        best_score = score\n\n        if len(candidate_preds) == 0:\n            unmapped.append({ 'text': term, 'reason': 'unknown' })\n            continue\n\n        top_candidates = [p for p in candidate_preds if abs(p[1] - best_score) <= AMB_DELTA]\n        notes = null\n\n        if len(top_candidates) == 1:\n            resolved_pred = top_candidates[0][0]\n        else:\n            resolved_pred, notes = resolve_by_context(term, top_candidates, norm_question)\n            if notes is null:\n                notes = 'ambiguous'\n\n        if resolved_pred not in ONTOLOGY_PREDICATES:\n            unmapped.append({ 'text': term, 'reason': 'out_of_scope' })\n            continue\n\n        confidence = round(best_score, 3)\n\n        concepts.append({\n            'text': term,\n            'canonical_predicate': resolved_pred,\n            'confidence': confidence,\n            'notes': notes\n        })\n\n    return {\n        'question': question,\n        'language': 'it',\n        'domain': 'civil_law_contractual_liability',\n        'concepts': concepts,\n        'unmapped_terms': unmapped\n    }\n\n# Helper functions (interfaces)\n\nfunction load_yaml(path: string) -> object:\n    # deterministic YAML loader\n    ...\n\nfunction build_synonym_table(ontology: object) -> object:\n    table = {}\n    for pred, data in ontology['predicates'].items():\n        syns = data.get('synonyms', [])\n        syns = unique(syns + [pred])\n        table[pred] = syns\n    return table\n\nfunction nlp_analyze(text: string) -> (list, list, list, list):\n    # deterministic Italian NLP analysis (version-pinned model)\n    ...\n\nfunction extract_candidate_segments(tokens: list, lemmas: list, pos_tags: list, deps: list) -> list:\n    # rule-based extraction of uni/bi/tri-grams and ontology-aware phrases\n    ...\n\nfunction normalize_segment(s: string) -> string:\n    # lowercase, trim, remove superfluous punctuation, collapse spaces\n    ...\n\nfunction similarity(a: string, b: string) -> float:\n    # deterministic string similarity (e.g., Jaro–Winkler)\n    ...\n\nfunction resolve_by_context(term: string, candidates: list, question: string) -> (string, string | null):\n    # rule-based context analysis to choose between candidates\n    ...\n\nfunction is_out_of_domain(term_norm: string, blacklist: list) -> bool:\n    for bad in blacklist:\n        if bad in term_norm:\n            return true\n    return false\n",
+      "integration_notes_phase_2.1": "The canonicalizer output feeds Phase 2.1 of NSLA v2. The concepts list provides the set of canonical predicates that should be instantiated as facts in the DSL v2.1 JSON program. Each predicate’s arity, obtained from the ontology, guides downstream modules to create appropriate entities and arguments (e.g., debtor, creditor, contract, damage). Concepts such as Inadempimento, DannoPatrimoniale, NessoCausale, ResponsabilitaContrattuale directly inform the structure of inference rules. Unmapped_terms with reason = 'unknown' can trigger clarification prompts, while out_of_scope terms prevent contamination of the symbolic layer with non-contractual predicates. The deterministic nature of the canonicalizer ensures stable behavior across iterations in the two-pass NSLA v2 pipeline."
+    },
+    "final_agent_code": {
+      "description": "This is the final operational ontology canonicalizer, implemented as a deterministic Python-like class that maps Italian contractual-liability questions to canonical predicates defined in legal_it_v1.yaml.",
+      "python_like_pseudocode": "class LegalQuestionCanonicalizer:\n    \"\"\"Deterministic question-to-ontology canonicalizer for Italian contractual liability (NSLA v2).\"\"\"\n\n    SIM_THRESHOLD = 0.85\n    AMB_DELTA = 0.05\n\n    def __init__(self, ontology_path: str = 'legal_it_v1.yaml'):\n        self.ontology = self._load_ontology(ontology_path)\n        self.predicates = set(self.ontology['predicates'].keys())\n        self.synonyms = self._build_synonym_table(self.ontology)\n        self.domain_blacklist = [\n            'penale', 'reato', 'extracontrattuale',\n            'illecito extracontrattuale', 'amministrativo',\n            'lavoro', 'previdenziale'\n        ]\n\n    # ---- ontology loading ----\n\n    def _load_ontology(self, path: str) -> dict:\n        # Deterministic YAML load with pinned dependencies.\n        # with open(path, 'r', encoding='utf-8') as f:\n        #     return yaml.safe_load(f)\n        raise NotImplementedError\n\n    def _build_synonym_table(self, ontology: dict) -> dict:\n        table = {}\n        for pred, data in ontology['predicates'].items():\n            syns = data.get('synonyms', [])\n            syns = list(set(syns + [pred]))\n            table[pred] = syns\n        return table\n\n    # ---- public API ----\n\n    def canonicalize(self, question: str) -> dict:\n        norm_question = self._normalize_text(question)\n        tokens, lemmas, pos_tags, deps = self._nlp_analyze(norm_question)\n\n        candidate_terms = self._extract_candidate_segments(tokens, lemmas, pos_tags, deps)\n        concepts = []\n        unmapped = []\n\n        for term in candidate_terms:\n            term_norm = self._normalize_segment(term)\n\n            if self._is_out_of_domain(term_norm):\n                unmapped.append({'text': term, 'reason': 'out_of_scope'})\n                continue\n\n            best_score = 0.0\n            candidate_preds = []\n\n            for pred, syn_list in self.synonyms.items():\n                for syn in syn_list:\n                    syn_norm = self._normalize_segment(syn)\n                    score = self._similarity(term_norm, syn_norm)\n                    if score >= self.SIM_THRESHOLD:\n                        candidate_preds.append((pred, score))\n                        if score > best_score:\n                            best_score = score\n\n            if not candidate_preds:\n                unmapped.append({'text': term, 'reason': 'unknown'})\n                continue\n\n            top_candidates = [p for p in candidate_preds if abs(p[1] - best_score) <= self.AMB_DELTA]\n            notes = None\n\n            if len(top_candidates) == 1:\n                resolved_pred = top_candidates[0][0]\n            else:\n                resolved_pred, notes = self._resolve_by_context(term, top_candidates, norm_question)\n                if notes is None:\n                    notes = 'ambiguous'\n\n            if resolved_pred not in self.predicates:\n                unmapped.append({'text': term, 'reason': 'out_of_scope'})\n                continue\n\n            confidence = round(best_score, 3)\n\n            concepts.append({\n                'text': term,\n                'canonical_predicate': resolved_pred,\n                'confidence': confidence,\n                'notes': notes\n            })\n\n        return {\n            'question': question,\n            'language': 'it',\n            'domain': 'civil_law_contractual_liability',\n            'concepts': concepts,\n            'unmapped_terms': unmapped\n        }\n\n    # ---- NLP helpers ----\n\n    def _normalize_text(self, text: str) -> str:\n        return ' '.join(text.lower().split())\n\n    def _nlp_analyze(self, text: str):\n        # Tokenization, lemmatization, POS and dependencies with a fixed Italian NLP model.\n        raise NotImplementedError\n\n    def _extract_candidate_segments(self, tokens, lemmas, pos_tags, deps):\n        # Rule-based extraction of ontology-relevant phrases (uni-/bi-/tri-grams, NP chunks, etc.).\n        segments = []\n        # ... deterministic rules here ...\n        return segments\n\n    def _normalize_segment(self, s: str) -> str:\n        # Lowercase, strip, remove extra punctuation, collapse spaces.\n        return ' '.join(s.lower().split())\n\n    def _similarity(self, a: str, b: str) -> float:\n        # Deterministic implementation of Jaro–Winkler or similar string similarity.\n        raise NotImplementedError\n\n    def _resolve_by_context(self, term: str, candidates: list, question: str):\n        # candidates: list[(predicate, score)]\n        # Apply fixed heuristics based on context keywords to resolve ambiguities.\n        # Return (chosen_predicate, notes_or_None).\n        raise NotImplementedError\n\n    def _is_out_of_domain(self, term_norm: str) -> bool:\n        return any(bad in term_norm for bad in self.domain_blacklist)\n"
+    }
+  }
+}

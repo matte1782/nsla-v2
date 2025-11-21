@@ -1,0 +1,23 @@
+# requirements.txt
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+z3-solver>=4.12.0  # Z3 theorem prover (NON installare il pacchetto 'z3'!)
+
+# requirements_v2.txt
+# Core dependencies for NSLA v2
+z3-solver>=4.8.0
+pydantic>=2.0.0
+pytest>=7.0.0
+colorama>=0.4.0
+typing-extensions>=4.0.0
+
+# FastAPI and HTTP testing
+fastapi>=0.100.0
+uvicorn>=0.20.0
+httpx>=0.24.0
+
+# Optional development dependencies
+ipykernel>=6.0.0
+python-dotenv>=1.0.0
+pyyaml>=6.0.0

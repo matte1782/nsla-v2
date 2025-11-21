@@ -1,0 +1,65 @@
+{
+  "question": "Il cliente ha stipulato un contratto per la fornitura di servizi professionali, ma il professionista non ha rispettato le specifiche pattuite causando ritardi e danni economici. Il cliente può chiedere il risarcimento del danno e la responsabilità del professionista sussiste?",
+  "language": "it",
+  "domain": "civil_law_contractual_liability",
+  "concepts": [
+    {
+      "text": "contratto",
+      "canonical_predicate": "Contratto",
+      "confidence": 1.0,
+      "notes": null
+    },
+    {
+      "text": "fornitura di servizi professionali",
+      "canonical_predicate": "Contratto",
+      "confidence": 0.92,
+      "notes": null
+    },
+    {
+      "text": "rispetto delle specifiche pattuite",
+      "canonical_predicate": "Adempimento",
+      "confidence": 0.88,
+      "notes": null
+    },
+    {
+      "text": "non ha rispettato",
+      "canonical_predicate": "Inadempimento",
+      "confidence": 0.95,
+      "notes": null
+    },
+    {
+      "text": "ritardi",
+      "canonical_predicate": "Mora",
+      "confidence": 0.93,
+      "notes": null
+    },
+    {
+      "text": "responsabilità del professionista",
+      "canonical_predicate": "ResponsabilitaContrattuale",
+      "confidence": 0.91,
+      "notes": null
+    },
+    {
+      "text": "risarcimento del danno",
+      "canonical_predicate": "Risarcimento",
+      "confidence": 0.97,
+      "notes": null
+    },
+    {
+      "text": "danni economici",
+      "canonical_predicate": "DannoPatrimoniale",
+      "confidence": 0.96,
+      "notes": null
+    }
+  ],
+  "unmapped_terms": [
+    {
+      "text": "specifiche pattuite",
+      "reason": "unknown"
+    },
+    {
+      "text": "servizi professionali",
+      "reason": "unknown"
+    }
+  ]
+}

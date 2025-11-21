@@ -1,0 +1,32 @@
+{
+  "ok": false,
+  "issues": [
+    {
+      "type": "arity_mismatch",
+      "detail": "Predicate 'NessoCausale' declared with arity 2 expecting (Inadempimento, Danno) but used in rules with atomic arguments (Inadempimento, DannoEconomico) and (Inadempimento, DannoEconomico) - arity mismatch"
+    },
+    {
+      "type": "arity_mismatch", 
+      "detail": "Predicate 'Inadempimento' declared with arity 2 expecting (Debitore, Contratto) but axiom uses (Professionista, Inadempimento) where Inadempimento should be a Contratto type, creating type confusion"
+    },
+    {
+      "type": "ontology_violation",
+      "detail": "Axiom a1 uses predicate 'Imputabilita' with formula that doesn't match its ontology definition - should relate Debitore to Inadempimento event, not create a new predicate instance"
+    },
+    {
+      "type": "contradiction",
+      "detail": "Rule r2 concludes (Inadempimento Professionista ContrattoServizi) while rule r1 already assumes (Inadempimento Professionista ContrattoServizi) in its conditions, creating logical redundancy"
+    },
+    {
+      "type": "query_issue",
+      "detail": "Query uses atomic predicate (ResponsabilitaContrattuale Professionista Cliente DannoEconomico) but arguments don't match expected arity 3 signature (Debitore, Creditore, Danno) - should be consistent types"
+    }
+  ],
+  "auto_fix_suggestions": [
+    "Fix NessoCausale arity usage to match its 2-argument declaration or adjust declaration to match usage pattern",
+    "Correct Inadempimento argument usage in axiom to maintain proper type consistency",
+    "Redesign axiom a1 to properly establish Imputabilita without creating predicate instances",
+    "Remove redundant Inadempimento assumptions to eliminate logical loops",
+    "Ensure query arguments match declared predicate arity patterns"
+  ]
+}

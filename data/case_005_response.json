@@ -1,0 +1,430 @@
+{
+  "mode": "v2_single",
+  "final_answer": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Cosa si intende per contratto di adesione?'.\n\nRequisiti simbolici soddisfatti: PredeterminatoDa, NonNegoziabileDa, PuoSoloAccettareOppureRifiutare, HaObbligo, Inadempimento, DannoPatrimoniale, CausaNonImputabile, Imputabilita, ContrattoAdesione, ResponsabilitaContrattuale.",
+  "logic_program": {
+    "dsl_version": "2.1",
+    "sorts": {
+      "Debitore": {
+        "type": "Soggetto"
+      },
+      "Creditore": {
+        "type": "Soggetto"
+      },
+      "Contratto": {
+        "type": "Accordo"
+      },
+      "Consumatore": {
+        "type": "Soggetto"
+      },
+      "Professionista": {
+        "type": "Soggetto"
+      },
+      "Danno": {
+        "type": "Pregiudizio"
+      },
+      "Soggetto": {
+        "description": "Soggetto giuridico coinvolto nel rapporto obbligatorio (persona fisica o giuridica).",
+        "type": "Entity"
+      },
+      "Entity": {
+        "type": "Entity"
+      }
+    },
+    "constants": {
+      "prof": {
+        "sort": "Professionista"
+      },
+      "cons": {
+        "sort": "Consumatore"
+      },
+      "contr": {
+        "sort": "Contratto"
+      },
+      "debitore_1": {
+        "sort": "Debitore"
+      },
+      "creditore_2": {
+        "sort": "Creditore"
+      },
+      "soggetto_1": {
+        "sort": "Soggetto"
+      },
+      "entity_1": {
+        "sort": "Entity"
+      }
+    },
+    "predicates": {
+      "ContrattoAdesione": {
+        "arity": 1,
+        "sorts": [
+          "Contratto"
+        ]
+      },
+      "PredeterminatoDa": {
+        "arity": 2,
+        "sorts": [
+          "Contratto",
+          "Professionista"
+        ]
+      },
+      "NonNegoziabileDa": {
+        "arity": 2,
+        "sorts": [
+          "Contratto",
+          "Consumatore"
+        ]
+      },
+      "PuoSoloAccettareOppureRifiutare": {
+        "arity": 2,
+        "sorts": [
+          "Consumatore",
+          "Contratto"
+        ]
+      },
+      "HaObbligo": {
+        "arity": 3,
+        "sorts": [
+          "Debitore",
+          "Creditore",
+          "Contratto"
+        ]
+      },
+      "Inadempimento": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      },
+      "DannoPatrimoniale": {
+        "arity": 1,
+        "sorts": [
+          "Soggetto"
+        ]
+      },
+      "CausaNonImputabile": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      },
+      "ResponsabilitaContrattuale": {
+        "arity": 3,
+        "sorts": [
+          "Debitore",
+          "Creditore",
+          "Contratto"
+        ]
+      },
+      "Imputabilita": {
+        "arity": 2,
+        "sorts": [
+          "Entity",
+          "Entity"
+        ]
+      }
+    },
+    "facts": {},
+    "axioms": [
+      {
+        "formula": "PredeterminatoDa(prof, contr)"
+      },
+      {
+        "formula": "NonNegoziabileDa(cons, contr)"
+      },
+      {
+        "formula": "PuoSoloAccettareOppureRifiutare(cons, contr)"
+      },
+      {
+        "formula": "HaObbligo(prof, cons, contr)"
+      },
+      {
+        "formula": "HaObbligo(debitore_1, creditore_2, contr)"
+      },
+      {
+        "formula": "Inadempimento(debitore_1, contr)"
+      },
+      {
+        "formula": "DannoPatrimoniale(soggetto_1)"
+      },
+      {
+        "formula": "CausaNonImputabile(debitore_1, contr)"
+      },
+      {
+        "formula": "Imputabilita(entity_1, entity_1)"
+      }
+    ],
+    "rules": [
+      {
+        "condition": "(and PredeterminatoDa(P, C) NonNegoziabileDa(Cns, C) PuoSoloAccettareOppureRifiutare(Cns, C))",
+        "conclusion": "ContrattoAdesione(C)",
+        "id": null
+      },
+      {
+        "condition": "(and HaObbligo(D, Cr, C) Inadempimento(D, C) DannoPatrimoniale(Cr) (not CausaNonImputabile(D, C)))",
+        "conclusion": "ResponsabilitaContrattuale(D, Cr, C)",
+        "id": null
+      },
+      {
+        "condition": "(and HaObbligo(prof, cons, contr) Inadempimento(prof, contr) DannoPatrimoniale(cons) Imputabilita(prof, contr))",
+        "conclusion": "ResponsabilitaContrattuale(prof, cons, contr)",
+        "id": null
+      }
+    ],
+    "query": "ResponsabilitaContrattuale(prof, cons, contr)"
+  },
+  "feedback": {
+    "status": "consistent_no_entailment",
+    "missing_links": [
+      "HaObbligo",
+      "Inadempimento",
+      "DannoPatrimoniale",
+      "CausaNonImputabile",
+      "Imputabilita"
+    ],
+    "conflicting_axioms": [],
+    "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+  },
+  "phase2": {
+    "canonicalization": {
+      "question": "Cosa si intende per contratto di adesione?",
+      "language": "it",
+      "domain": "civil_law_contractual_liability",
+      "concepts": [
+        {
+          "text": "contratto di adesione",
+          "canonical_predicate": "ContrattoAdesione",
+          "confidence": 1.0,
+          "notes": null
+        }
+      ],
+      "unmapped_terms": []
+    },
+    "logic_program_v1": {
+      "dsl_version": "2.1",
+      "sorts": {
+        "Debitore": {
+          "type": "Soggetto"
+        },
+        "Creditore": {
+          "type": "Soggetto"
+        },
+        "Contratto": {
+          "type": "Accordo"
+        },
+        "Consumatore": {
+          "type": "Soggetto"
+        },
+        "Professionista": {
+          "type": "Soggetto"
+        },
+        "Danno": {
+          "type": "Pregiudizio"
+        },
+        "Soggetto": {
+          "description": "Soggetto giuridico coinvolto nel rapporto obbligatorio (persona fisica o giuridica).",
+          "type": "Entity"
+        }
+      },
+      "constants": {
+        "prof": {
+          "sort": "Professionista"
+        },
+        "cons": {
+          "sort": "Consumatore"
+        },
+        "contr": {
+          "sort": "Contratto"
+        },
+        "debitore_1": {
+          "sort": "Debitore"
+        },
+        "creditore_2": {
+          "sort": "Creditore"
+        },
+        "soggetto_1": {
+          "sort": "Soggetto"
+        },
+        "entity_1": {
+          "sort": "Entity"
+        }
+      },
+      "predicates": {
+        "ContrattoAdesione": {
+          "arity": 1,
+          "sorts": [
+            "Contratto"
+          ]
+        },
+        "PredeterminatoDa": {
+          "arity": 2,
+          "sorts": [
+            "Contratto",
+            "Professionista"
+          ]
+        },
+        "NonNegoziabileDa": {
+          "arity": 2,
+          "sorts": [
+            "Contratto",
+            "Consumatore"
+          ]
+        },
+        "PuoSoloAccettareOppureRifiutare": {
+          "arity": 2,
+          "sorts": [
+            "Consumatore",
+            "Contratto"
+          ]
+        },
+        "HaObbligo": {
+          "arity": 3,
+          "sorts": [
+            "Debitore",
+            "Creditore",
+            "Contratto"
+          ]
+        },
+        "Inadempimento": {
+          "arity": 2,
+          "sorts": [
+            "Debitore",
+            "Contratto"
+          ]
+        },
+        "DannoPatrimoniale": {
+          "arity": 1,
+          "sorts": [
+            "Soggetto"
+          ]
+        },
+        "CausaNonImputabile": {
+          "arity": 2,
+          "sorts": [
+            "Debitore",
+            "Contratto"
+          ]
+        },
+        "ResponsabilitaContrattuale": {
+          "arity": 3,
+          "sorts": [
+            "Debitore",
+            "Creditore",
+            "Contratto"
+          ]
+        },
+        "Imputabilita": {
+          "arity": 2,
+          "sorts": [
+            "Entity",
+            "Entity"
+          ]
+        }
+      },
+      "facts": {},
+      "axioms": [
+        {
+          "formula": "PredeterminatoDa(prof, contr)"
+        },
+        {
+          "formula": "NonNegoziabileDa(cons, contr)"
+        },
+        {
+          "formula": "PuoSoloAccettareOppureRifiutare(cons, contr)"
+        },
+        {
+          "formula": "HaObbligo(prof, cons, contr)"
+        },
+        {
+          "formula": "HaObbligo(debitore_1, creditore_2, contr)"
+        },
+        {
+          "formula": "Inadempimento(debitore_1, contr)"
+        },
+        {
+          "formula": "DannoPatrimoniale(soggetto_1)"
+        },
+        {
+          "formula": "CausaNonImputabile(debitore_1, contr)"
+        },
+        {
+          "formula": "Imputabilita(entity_1, entity_1)"
+        }
+      ],
+      "rules": [
+        {
+          "condition": "(and PredeterminatoDa(P, C) NonNegoziabileDa(Cns, C) PuoSoloAccettareOppureRifiutare(Cns, C))",
+          "conclusion": "ContrattoAdesione(C)",
+          "id": null
+        },
+        {
+          "condition": "(and HaObbligo(D, Cr, C) Inadempimento(D, C) DannoPatrimoniale(Cr) (not CausaNonImputabile(D, C)))",
+          "conclusion": "ResponsabilitaContrattuale(D, Cr, C)",
+          "id": null
+        },
+        {
+          "condition": "(and HaObbligo(prof, cons, contr) Inadempimento(prof, contr) DannoPatrimoniale(cons) Imputabilita(prof, contr))",
+          "conclusion": "ResponsabilitaContrattuale(prof, cons, contr)",
+          "id": null
+        }
+      ],
+      "query": "ResponsabilitaContrattuale(prof, cons, contr)"
+    },
+    "feedback_v1": {
+      "status": "consistent_no_entailment",
+      "missing_links": [
+        "HaObbligo",
+        "Inadempimento",
+        "DannoPatrimoniale",
+        "CausaNonImputabile",
+        "Imputabilita"
+      ],
+      "conflicting_axioms": [],
+      "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+    },
+    "answer_v1": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Cosa si intende per contratto di adesione?'."
+  },
+  "guardrail": {
+    "ok": true,
+    "issues": []
+  },
+  "explanation": {
+    "summary": "Il programma logico \u00e8 coerente ma non implica ancora la conclusione. Mancano collegamenti o premesse aggiuntive. Feedback sintetico: Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile.",
+    "status": "consistent_no_entailment",
+    "details": {
+      "question": "Cosa si intende per contratto di adesione?",
+      "final_answer": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Cosa si intende per contratto di adesione?'.\n\nRequisiti simbolici soddisfatti: PredeterminatoDa, NonNegoziabileDa, PuoSoloAccettareOppureRifiutare, HaObbligo, Inadempimento, DannoPatrimoniale, CausaNonImputabile, Imputabilita, ContrattoAdesione, ResponsabilitaContrattuale.",
+      "missing_links": [
+        "HaObbligo",
+        "Inadempimento",
+        "DannoPatrimoniale",
+        "CausaNonImputabile",
+        "Imputabilita"
+      ],
+      "conflicting_axioms": []
+    }
+  },
+  "structured_stats": {
+    "predicates_total": 9,
+    "rules_total": 3
+  },
+  "llm_status": {
+    "Canonicalizer": "ok",
+    "Structured Extractor": "ok",
+    "Refinement LLM": "ok"
+  },
+  "judge": {
+    "question": "Cosa si intende per contratto di adesione?",
+    "reference_answer": "\u00c8 un contratto predisposto unilateralmente dal professionista in cui l'altra parte pu\u00f2 solo aderire senza negoziare clausole.",
+    "answer_a": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Cosa si intende per contratto di adesione?'.",
+    "answer_b": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Cosa si intende per contratto di adesione?'.\n\nRequisiti simbolici soddisfatti: PredeterminatoDa, NonNegoziabileDa, PuoSoloAccettareOppureRifiutare, HaObbligo, Inadempimento, DannoPatrimoniale, CausaNonImputabile, Imputabilita, ContrattoAdesione, ResponsabilitaContrattuale.",
+    "label_a": "baseline_v1",
+    "label_b": "nsla_v2",
+    "vote": "tie",
+    "confidence": 0.0,
+    "rationale": "Judge metric disabled."
+  },
+  "fallback_used": false,
+  "fallback_feedback": null
+}

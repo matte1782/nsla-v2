@@ -1,0 +1,84 @@
+{
+  "final_answer": "SÌ, il cliente può chiedere il risarcimento del danno e la responsabilità del professionista sussiste. Secondo gli articoli 1218 e 1223 del Codice Civile, il professionista che non adempie esattamente la prestazione contrattuale è responsabile dei danni patrimoniali subiti dal cliente, purché questi siano conseguenza immediata e diretta dell'inadempimento. La violazione delle specifiche pattuite e i ritardi nella prestazione configurano un inadempimento imputabile al debitore, che può liberarsi solo provando una causa non imputabile.",
+  "logic_program": {
+    "dsl_version": "2.1",
+    "sorts": {
+      "Debitore": "Soggetto obbligato all'adempimento",
+      "Creditore": "Soggetto titolare della pretesa contrattuale",
+      "Contratto": "Accordo che genera obbligazioni",
+      "Danno": "Pregiudizio economico derivante dall'inadempimento"
+    },
+    "constants": {
+      "Cliente": "Creditore",
+      "Professionista": "Debitore",
+      "ContrattoServizi": "Contratto",
+      "DannoEconomico": "Danno"
+    },
+    "predicates": {
+      "Contratto": {
+        "arity": 1,
+        "args": ["Contratto"],
+        "description": "Esistenza di un contratto"
+      },
+      "Inadempimento": {
+        "arity": 2,
+        "args": ["Debitore", "Contratto"],
+        "description": "Il debitore non adempie alla prestazione contrattuale"
+      },
+      "DannoPatrimoniale": {
+        "arity": 1,
+        "args": ["Soggetto"],
+        "description": "Il soggetto subisce un danno economico"
+      },
+      "NessoCausale": {
+        "arity": 2,
+        "args": ["Inadempimento", "Danno"],
+        "description": "Relazione causale tra inadempimento e danno"
+      },
+      "ResponsabilitaContrattuale": {
+        "arity": 3,
+        "args": ["Debitore", "Creditore", "Danno"],
+        "description": "Responsabilità del debitore per inadempimento contrattuale"
+      },
+      "Mora": {
+        "arity": 1,
+        "args": ["Debitore"],
+        "description": "Ritardo nell'adempimento del debitore"
+      },
+      "Imputabilita": {
+        "arity": 2,
+        "args": ["Debitore", "Inadempimento"],
+        "description": "Inadempimento imputabile al debitore"
+      }
+    },
+    "axioms": [
+      {
+        "id": "a1",
+        "formula": "(implies (and (Contratto ContrattoServizi) (Inadempimento Professionista ContrattoServizi)) (Imputabilita Professionista Inadempimento))",
+        "description": "Presunzione di colpa del debitore in caso di inadempimento (art. 1218 c.c.)"
+      }
+    ],
+    "rules": [
+      {
+        "id": "r1",
+        "condition": "(and (Contratto ContrattoServizi) (Inadempimento Professionista ContrattoServizi) (DannoPatrimoniale Cliente) (NessoCausale Inadempimento DannoEconomico))",
+        "conclusion": "(ResponsabilitaContrattuale Professionista Cliente DannoEconomico)",
+        "description": "Responsabilità contrattuale per inadempimento con danno e nesso causale"
+      },
+      {
+        "id": "r2",
+        "condition": "(and (Mora Professionista) (DannoPatrimoniale Cliente))",
+        "conclusion": "(Inadempimento Professionista ContrattoServizi)",
+        "description": "La mora costituisce forma di inadempimento"
+      },
+      {
+        "id": "r3",
+        "condition": "(and (Imputabilita Professionista Inadempimento) (DannoPatrimoniale Cliente) (NessoCausale Inadempimento DannoEconomico))",
+        "conclusion": "(ResponsabilitaContrattuale Professionista Cliente DannoEconomico)",
+        "description": "Responsabilità contrattuale per inadempimento imputabile con danno e nesso causale (art. 1218 c.c.)"
+      }
+    ],
+    "query": "(ResponsabilitaContrattuale Professionista Cliente DannoEconomico)"
+  },
+  "notes": "Refined v2 program adds rule r3 that incorporates the Imputabilita predicate as required by art. 1218 c.c. The new rule r3 provides a more direct path to establishing contractual liability by explicitly including the imputation element, addressing the missing link between inadempimento and responsabilità. This creates redundancy in the logic that ensures the query can be entailed through multiple reasoning paths, improving the robustness of the legal reasoning system."
+}

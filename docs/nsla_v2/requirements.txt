@@ -1,0 +1,26 @@
+# Step 1: Navigazione al progetto
+cd "C:\Users\matte\Desktop\Desktop OLD\AI\Università AI\courses\computational_logic\resources\book\neurosimbolic_project_v2"
+
+# Step 2: Creazione ambiente virtuale
+python -m venv .venv_nsla_v2
+
+# Step 3: Attivazione ambiente (PowerShell)
+.venv_nsla_v2\Scripts\Activate.ps1
+
+# Step 4: Aggiornamento pip
+python -m pip install --upgrade pip
+
+# Step 5: Installazione dipendenze core
+pip install z3-solver pydantic pytest colorama typing-extensions
+
+# Step 6: Installazione dipendenze opzionali
+pip install ipykernel python-dotenv
+
+# Step 7: Esecuzione test principali
+pytest -v tests/test_translator_v2.py -k "test_simple_predicate_parsing_v21 or test_minimal_v21_program" --maxfail=1
+
+# Step 8: Esecuzione test feedback
+pytest -v tests/test_logic_feedback.py -k "test_consistent_entails_feedback or test_inconsistent_feedback" --maxfail=1
+
+# Step 9: Test completo della suite
+pytest -v --maxfail=1 --disable-warnings

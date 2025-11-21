@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NSLA - Neuro-Symbolic Legal Assistant</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f0f0f0; }
+        .container { max-width: 960px; margin: 0 auto; background: white; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-top: 0; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; }
+        textarea { width: 100%; min-height: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; }
+        select, input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 24px; padding: 20px; background: #f9f9f9; border-radius: 4px; }
+        .subsection { margin-top: 16px; padding-top: 10px; border-top: 1px solid #ddd; }
+        .badge { padding: 4px 10px; border-radius: 3px; display: inline-block; margin-top: 8px; font-weight: bold; }
+        .verified { background: #28a745; color: white; }
+        .not-verified { background: #dc3545; color: white; }
+        .neutral { background: #6c757d; color: white; }
+        .status { font-family: monospace; color: #333; }
+        .json-view { max-height: 320px; overflow: auto; background: #111; color: #0f0; padding: 12px; border-radius: 4px; font-size: 13px; }
+        .history-list { font-family: monospace; white-space: pre-wrap; background: #fff; padding: 10px; border-radius: 4px; max-height: 220px; overflow: auto; border: 1px solid #e0e0e0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NSLA - Neuro-Symbolic Legal Assistant</h1>
+        <div class="form-group">
+            <label for="question">Inserisci la tua domanda legale:</label>
+            <textarea id="question" placeholder="Es: Quali sono gli elementi costitutivi della colpa?"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="mode">Modalità pipeline</label>
+            <select id="mode">
+                <option value="legal_query">NSLA v1 (single pass)</option>
+                <option value="legal_query_v2">NSLA v2 (two-pass)</option>
+                <option value="legal_query_v2_iterative">NSLA v2 iterativa</option>
+            </select>
+        </div>
+        <div class="form-group" id="iter-controls" style="display: none;">
+            <label for="maxIters">Iterazioni massime (Phase 3)</label>
+            <input type="number" id="maxIters" value="3" min="1" max="10">
+        </div>
+        <button id="btn-send">Invia Domanda</button>
+        
+        <div class="result" id="result" style="display: none;">
+            <h2>Risultato</h2>
+            <p id="answer" class="status"></p>
+
+            <div id="v1-meta" class="subsection" style="display: none;">
+                <h3>NSLA v1</h3>
+                <span class="badge neutral" id="verified-badge">n/d</span>
+                <p class="status">Stato Z3: <span id="z3-status">n/d</span></p>
+            </div>
+
+            <div id="v2-section" class="subsection" style="display: none;">
+                <h3>Phase 2 (two-pass)</h3>
+                <p><strong>Status feedback:</strong> <span id="v2-status">-</span></p>
+                <p><strong>Missing links:</strong> <span id="v2-missing">-</span></p>
+                <p><strong>Guardrail:</strong> <span id="v2-guardrail">-</span></p>
+                <p><strong>Fallback:</strong> <span id="v2-fallback">-</span></p>
+                <p><strong>Spiegazione:</strong> <span id="v2-explanation">-</span></p>
+            </div>
+
+            <div id="iter-section" class="subsection" style="display: none;">
+                <h3>Phase 3 (iterativa)</h3>
+                <p><strong>Iterazione migliore:</strong> <span id="iter-best-idx">-</span></p>
+                <p><strong>Status:</strong> <span id="iter-status">-</span></p>
+                <p><strong>Missing links:</strong> <span id="iter-missing">-</span></p>
+                <p><strong>Conflicts:</strong> <span id="iter-conflicts">-</span></p>
+                <p><strong>Guardrail:</strong> <span id="iter-guardrail">-</span></p>
+                <p><strong>Numero iterazioni:</strong> <span id="iter-length">0</span></p>
+                <div class="history-list" id="iter-history">Nessuna history</div>
+            </div>
+
+            <div class="subsection">
+                <h3>Payload JSON</h3>
+                <pre id="json-dump" class="json-view">{}</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionEl = document.getElementById('question');
+        const button = document.getElementById('btn-send');
+        const resultPanel = document.getElementById('result');
+        const modeEl = document.getElementById('mode');
+        const iterControls = document.getElementById('iter-controls');
+        const maxItersEl = document.getElementById('maxIters');
+        const answerEl = document.getElementById('answer');
+        const v1Meta = document.getElementById('v1-meta');
+        const v2Section = document.getElementById('v2-section');
+        const iterSection = document.getElementById('iter-section');
+        const badge = document.getElementById('verified-badge');
+        const z3Status = document.getElementById('z3-status');
+        const jsonDump = document.getElementById('json-dump');
+
+        const v2StatusEl = document.getElementById('v2-status');
+        const v2MissingEl = document.getElementById('v2-missing');
+        const v2GuardrailEl = document.getElementById('v2-guardrail');
+        const v2FallbackEl = document.getElementById('v2-fallback');
+        const v2ExplanationEl = document.getElementById('v2-explanation');
+
+        const iterBestIdx = document.getElementById('iter-best-idx');
+        const iterStatus = document.getElementById('iter-status');
+        const iterMissing = document.getElementById('iter-missing');
+        const iterConflicts = document.getElementById('iter-conflicts');
+        const iterGuardrail = document.getElementById('iter-guardrail');
+        const iterLength = document.getElementById('iter-length');
+        const iterHistory = document.getElementById('iter-history');
+
+        modeEl.addEventListener('change', () => {
+            iterControls.style.display = modeEl.value === 'legal_query_v2_iterative' ? 'block' : 'none';
+        });
+
+        const formatList = (items) => (items && items.length ? items.join(', ') : 'nessuno');
+
+        const resetView = () => {
+            v1Meta.style.display = 'none';
+            v2Section.style.display = 'none';
+            iterSection.style.display = 'none';
+            badge.className = 'badge neutral';
+            badge.textContent = 'n/d';
+            z3Status.textContent = 'n/d';
+            answerEl.textContent = '';
+            v2StatusEl.textContent = '-';
+            v2MissingEl.textContent = '-';
+            v2GuardrailEl.textContent = '-';
+            v2FallbackEl.textContent = '-';
+            v2ExplanationEl.textContent = '-';
+            iterBestIdx.textContent = '-';
+            iterStatus.textContent = '-';
+            iterMissing.textContent = '-';
+            iterConflicts.textContent = '-';
+            iterGuardrail.textContent = '-';
+            iterLength.textContent = '0';
+            iterHistory.textContent = 'Nessuna history';
+        };
+
+        const renderV1 = (data) => {
+            answerEl.textContent = data.answer || data.final_answer || 'Nessuna risposta disponibile.';
+            const isVerified = !!data.verified;
+            badge.textContent = isVerified ? 'Verificato ✅' : 'Non verificato';
+            badge.className = 'badge ' + (isVerified ? 'verified' : 'not-verified');
+            z3Status.textContent = data.z3_status || 'n/d';
+            v1Meta.style.display = 'block';
+        };
+
+        const renderPhase2 = (data) => {
+            answerEl.textContent = data.final_answer || 'Nessuna risposta disponibile.';
+            const feedback = data.feedback || {};
+            const guardrail = data.guardrail || {};
+            v2StatusEl.textContent = feedback.status || 'n/d';
+            v2MissingEl.textContent = formatList(feedback.missing_links || []);
+            v2GuardrailEl.textContent = guardrail.ok ? 'OK ✅' : 'KO ❌';
+            if (guardrail.issues && guardrail.issues.length) {
+                v2GuardrailEl.textContent += ` (${guardrail.issues.length} issue)`;
+            }
+            v2FallbackEl.textContent = data.fallback_used ? 'Attivo' : 'No';
+            v2ExplanationEl.textContent = (data.explanation && data.explanation.summary) || 'n/d';
+            v2Section.style.display = 'block';
+        };
+
+        const renderIterative = (data) => {
+            const best = data.best || {};
+            const feedback = best.feedback || {};
+            const guardrail = best.guardrail || {};
+            answerEl.textContent = best.final_answer || 'Nessuna risposta disponibile.';
+            iterBestIdx.textContent = best.iteration ?? '0';
+            iterStatus.textContent = feedback.status || 'n/d';
+            iterMissing.textContent = formatList(feedback.missing_links || []);
+            iterConflicts.textContent = formatList(feedback.conflicting_axioms || []);
+            iterGuardrail.textContent = guardrail.ok ? 'OK ✅' : 'KO ❌';
+            iterLength.textContent = (data.history || []).length;
+            iterHistory.textContent = (data.history || [])
+                .map((entry) => `iter ${entry.iteration}: ${entry.status} | missing=${formatList(entry.missing_links || [])}`)
+                .join('\n') || 'Nessuna history';
+            iterSection.style.display = 'block';
+        };
+
+        button.addEventListener('click', async () => {
+            const question = questionEl.value.trim();
+            if (!question) {
+                alert('Per favore inserisci una domanda');
+                return;
+            }
+
+            const mode = modeEl.value;
+            let url = `/${mode}`;
+            if (mode === 'legal_query_v2_iterative') {
+                const maxIters = Math.max(1, parseInt(maxItersEl.value, 10) || 3);
+                url += `?max_iters=${maxIters}`;
+            }
+
+            resetView();
+            button.disabled = true;
+            button.textContent = 'Elaborazione...';
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question })
+                });
+
+                if (!response.ok) throw new Error('Errore di rete');
+
+                const data = await response.json();
+                jsonDump.textContent = JSON.stringify(data, null, 2);
+
+                if (mode === 'legal_query') {
+                    renderV1(data);
+                } else if (mode === 'legal_query_v2') {
+                    renderPhase2(data);
+                } else {
+                    renderIterative(data);
+                }
+
+                resultPanel.style.display = 'block';
+            } catch (error) {
+                alert('Si è verificato un errore: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Invia Domanda';
+            }
+        });
+    </script>
+</body>
+</html>

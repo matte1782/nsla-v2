@@ -1,0 +1,242 @@
+[
+  {
+    "id": "case_001",
+    "question": "Quali sono gli elementi costitutivi di un contratto valido secondo il diritto italiano?",
+    "gold_answer": "Un contratto è valido solo se sussistono cinque requisiti fondamentali: accordo tra le parti, causa lecita, oggetto possibile lecito e determinato, e osservanza della forma prescritta dalla legge quando richiesta. La mancanza anche di uno solo di tali elementi determina la nullità dell'atto.",
+    "gold_variants": [
+      "Affinché un contratto produca effetti occorrono accordo, causa, oggetto lecito e determinato e, quando imposa dalla legge, la forma ad substantiam.",
+      "Secondo il codice civile, validità contrattuale significa consenso valido, causa giustificabile, oggetto possibile e la forma richiesta dalle norme speciali."
+    ],
+    "tags": ["contrattuale", "formazione_contratto"]
+  },
+  {
+    "id": "case_002",
+    "question": "Quando si configura la responsabilità civile per colpa?",
+    "gold_answer": "La responsabilità civile per colpa si configura quando il soggetto viola un dovere di diligenza, provoca un danno ingiusto e tra condotta ed evento si accerta il nesso causale. I tre elementi devono concorrere congiuntamente.",
+    "gold_variants": [
+      "Serve una condotta negligente, un danno ingiusto e il collegamento causale tra i due fatti.",
+      "Si risponde per colpa quando l'agente, violando la diligenza richiesta, causa un danno prevedibile e direttamente derivante dalla sua azione."
+    ],
+    "tags": ["responsabilita_civile", "colpa"]
+  },
+  {
+    "id": "case_003",
+    "question": "Che differenza c'è tra inadempimento e ritardo nell'adempimento di un'obbligazione?",
+    "gold_answer": "L'inadempimento è la mancata esecuzione definitiva della prestazione dovuta, mentre il semplice ritardo è un adempimento tardivo che può essere sanato se il creditore lo accetta e non subisce pregiudizi essenziali.",
+    "gold_variants": [
+      "Inadempiere significa non eseguire affatto o in modo inesatto la prestazione, il ritardo indica invece uno slittamento temporale che può trasformarsi in inadempimento solo quando lede l'interesse del creditore.",
+      "Il ritardo è una mora solvendi, l'inadempimento è una violazione definitiva che apre la strada alla risoluzione e al risarcimento."
+    ],
+    "tags": ["obbligazioni", "inadempimento"]
+  },
+  {
+    "id": "case_004",
+    "question": "Quali sono i presupposti per il risarcimento del danno da fatto illecito?",
+    "gold_answer": "Il risarcimento per fatto illecito richiede la combinazione di un comportamento antigiuridico, un danno ingiusto e il nesso causale che collega la condotta all'evento lesivo, oltre alla prova dell'ammontare del pregiudizio.",
+    "gold_variants": [
+      "Serve un fatto illecito, un danno patrimoniale o non patrimoniale e la prova che il danno sia conseguenza immediata e diretta di quel fatto.",
+      "Il danneggiato deve dimostrare condotta, danno ingiusto e nesso eziologico per ottenere il risarcimento ex art. 2043 c.c."
+    ],
+    "tags": ["illecito_civile", "risarcimento_danno"]
+  },
+  {
+    "id": "case_005",
+    "question": "Cosa si intende per contratto di adesione?",
+    "gold_answer": "Per contratto di adesione si intende l'accordo predisposto unilateralmente da una parte, spesso professionista, al quale l'altra parte può soltanto aderire integralmente senza poter negoziare clausole singole.",
+    "gold_variants": [
+      "È un accordo a condizioni generali preconfezionate: il contraente debole può solo accettare o rifiutare in blocco.",
+      "Rientrano in questa categoria i contratti standardizzati in cui manca una trattativa individuale sulle clausole."
+    ],
+    "tags": ["contrattuale", "contratto_adesione"]
+  },
+  {
+    "id": "case_006",
+    "question": "Quali sono i requisiti per la validità di un testamento olografo?",
+    "gold_answer": "Il testamento olografo è valido solo se interamente autografo, datato e sottoscritto dal testatore; la firma deve essere posta alla fine del documento e la data indicare giorno, mese e anno.",
+    "gold_variants": [
+      "Serve la scrittura di pugno, la datazione completa e la sottoscrizione finale del testatore.",
+      "L'olografo privo di data o con firma non apposta in calce è nullo salvo le eccezioni ammesse dalla giurisprudenza."
+    ],
+    "tags": ["successioni", "testamento"]
+  },
+  {
+    "id": "case_007",
+    "question": "Quando si applica la disciplina del reato permanente?",
+    "gold_answer": "Si parla di reato permanente quando la condotta antigiuridica perdura nel tempo e l'offesa cessa solo quando termina l'azione; il termine di prescrizione decorre dalla cessazione della permanenza.",
+    "gold_variants": [
+      "La permanenza implica prosecuzione dell'evento lesivo finché dura l'azione, come per sequestro di persona o occupazione abusiva.",
+      "Nei reati permanenti il dies a quo della prescrizione coincide con la fine della condotta continuata."
+    ],
+    "tags": ["penale", "reato_permanente"]
+  },
+  {
+    "id": "case_008",
+    "question": "Qual è la differenza tra multa e ammenda nel diritto penale italiano?",
+    "gold_answer": "Multa e ammenda sono pene pecuniarie: la multa si applica ai delitti ed è graduata per quote in base alle condizioni economiche del reo, l'ammenda riguarda le contravvenzioni e ha importi minimi e massimi prefissati.",
+    "gold_variants": [
+      "La multa punisce i delitti e si calcola in ragione della capacità economica, mentre l'ammenda si applica alle contravvenzioni con importi fissi.",
+      "Delitti → multa (più gravosa, a quote); contravvenzioni → ammenda (meno afflittiva, a importo fisso)."
+    ],
+    "tags": ["penale", "pene_pecuniarie"]
+  },
+  {
+    "id": "case_009",
+    "question": "In cosa consiste l'usucapione per i beni immobili?",
+    "gold_answer": "L'usucapione immobiliare consente di acquistare la proprietà per effetto di un possesso pubblico, pacifico, ininterrotto e con animus domini protratto per vent'anni, salvo termini abbreviati previsti dalla legge.",
+    "gold_variants": [
+      "Se il possessore mantiene un possesso qualificato per 20 anni senza opposizioni, acquista il bene per usucapione.",
+      "È un modo di acquisto a titolo originario fondato sul possesso ventennale continuato e pacifico."
+    ],
+    "tags": ["diritto_reale", "usucapione"]
+  },
+  {
+    "id": "case_010",
+    "question": "Quali sono gli elementi della colpa in diritto civile?",
+    "gold_answer": "Gli elementi della colpa sono l'esistenza di un dovere di diligenza, la sua violazione, la prevedibilità dell'evento dannoso e la relazione causale tra condotta e danno. Solo se tutti sono presenti si configura colpa civilistica.",
+    "gold_variants": [
+      "Serve una regola di condotta, la sua inosservanza, la prevedibilità e il nesso causale con il danno.",
+      "La colpa si fonda su diligenza dovuta, violazione e causalità materiale con il pregiudizio."
+    ],
+    "tags": ["responsabilita_civile", "colpa"]
+  },
+  {
+    "id": "case_011",
+    "question": "Cosa si intende per nullità del matrimonio canonico?",
+    "gold_answer": "La nullità del matrimonio canonico è la dichiarazione del tribunale ecclesiastico che accerta l'assenza di un vero vincolo per la presenza di impedimenti dirimenti o vizi del consenso originari.",
+    "gold_variants": [
+      "È la sentenza che riconosce che un matrimonio non è mai esistito validamente per difetti strutturali (es. incapacità, simulazione, violenza).",
+      "Il tribunale ecclesiastico annulla il matrimonio quando mancano i requisiti previsti dal diritto canonico sin dal momento della celebrazione."
+    ],
+    "tags": ["diritto_canonico", "nullita_matrimonio"]
+  },
+  {
+    "id": "case_012",
+    "question": "Quando si applica la legge Geografica uniforme per i contratti internazionali?",
+    "gold_answer": "In assenza di scelta valida della legge applicabile, si applica la legge dello Stato con i collegamenti più stretti con il contratto, secondo i criteri di diritto internazionale privato.",
+    "gold_variants": [
+      "Se le parti non designano la legge, vale quella del paese con cui il contratto ha i legami più significativi.",
+      "La lex contractus si individua in base al centro di gravità del rapporto quando manca una scelta espressa."
+    ],
+    "tags": ["diritto_internazionale", "contratti"]
+  },
+  {
+    "id": "case_013",
+    "question": "Qual è la differenza tra misure cautelari personali e reali nel processo penale?",
+    "gold_answer": "Le misure cautelari personali limitano la libertà dell'indagato per esigenze processuali (fuga, inquinamento, reiterazione), mentre le misure reali incidono sui beni e mirano a conservare prove o garantire il pagamento di pene pecuniarie.",
+    "gold_variants": [
+      "Le prime incidono sulla persona (custodia, arresti domiciliari), le seconde riguardano il patrimonio (sequestro preventivo o conservativo).",
+      "Personali = tutela processuale attraverso limitazioni di libertà; reali = vincoli sui beni per evitare dispersione di prove o garanzie patrimoniali."
+    ],
+    "tags": ["processo_penale", "misure_cautelari"]
+  },
+  {
+    "id": "case_014",
+    "question": "Quando si configura il reato di riciclaggio di denaro?",
+    "gold_answer": "Il riciclaggio si perfeziona quando, conoscendo l'origine delittuosa dei beni, si compiono operazioni di sostituzione, trasferimento o impiego atte a ostacolare l'identificazione della provenienza illecita.",
+    "gold_variants": [
+      "Serve la consapevolezza dell'origine criminale e la realizzazione di attività idonee a dissimulare o reimpiegare i proventi.",
+      "Conversione, trasferimento o impiego di capitali sporchi con l'obiettivo di 'ripulirli' integra il reato previsto dall'art. 648-bis c.p."
+    ],
+    "tags": ["penale", "riciclaggio"]
+  },
+  {
+    "id": "case_015",
+    "question": "Cosa si intende per 'contratto preliminare' e quando diventa obbligatorio?",
+    "gold_answer": "Il contratto preliminare è un accordo con cui le parti si impegnano a concludere un successivo contratto definitivo, vincolandosi quando l'oggetto e gli elementi essenziali futuri sono determinati o determinabili.",
+    "gold_variants": [
+      "È un patto obbligatorio che prelude al definitivo e diventa cogente con la precisa indicazione di oggetto, prezzo e termini essenziali.",
+      "Il preliminare obbliga le parti a stipulare il definitivo; la sua efficacia scatta quando contiene tutti gli elementi essenziali del contratto finale."
+    ],
+    "tags": ["contrattuale", "preliminare"]
+  },
+  {
+    "id": "case_016",
+    "question": "Quando un licenziamento per giustificato motivo oggettivo è considerato legittimo?",
+    "gold_answer": "Il licenziamento per giustificato motivo oggettivo è legittimo quando si fonda su esigenze produttive o organizzative effettive e documentate, il datore dimostra l'impossibilità di ricollocare il lavoratore e rispetta le procedure di legge.",
+    "gold_variants": [
+      "Serve una comprovata ragione economico-organizzativa, l'assenza di soluzioni alternative e il rispetto della procedura ex art. 7 L. 604/1966.",
+      "È valido solo se motivato da esigenze reali dell'impresa e se il datore prova di aver tentato il repêchage."
+    ],
+    "tags": ["lavoro", "licenziamento"]
+  },
+  {
+    "id": "case_017",
+    "question": "Quali diritti ha il consumatore quando il bene acquistato è difettoso entro due anni?",
+    "gold_answer": "Entro due anni dalla consegna, il consumatore ha diritto alla garanzia legale: può chiedere riparazione o sostituzione gratuite, oppure una riduzione del prezzo o la risoluzione del contratto se i rimedi primari sono impossibili o eccessivamente onerosi.",
+    "gold_variants": [
+      "La garanzia legale consente riparazione/sostituzione e, se non possibili, riduzione del prezzo o risoluzione del contratto.",
+      "Art. 130 Codice del Consumo: riparazione, sostituzione, riduzione del prezzo o risoluzione a scelta del consumatore in caso di difetto di conformità."
+    ],
+    "tags": ["consumatore", "garanzia_legale"]
+  },
+  {
+    "id": "case_018",
+    "question": "Quando sorge la responsabilità medica contrattuale di una struttura sanitaria?",
+    "gold_answer": "La struttura sanitaria risponde contrattualmente se il paziente dimostra il contratto d'opera sanitaria e l'insorgenza di un danno riconducibile alla prestazione; spetta alla struttura provare che l'inadempimento sia stato inesistente o inevitabile secondo la diligenza professionale.",
+    "gold_variants": [
+      "Provata la prestazione e il danno, la struttura deve dimostrare di aver agito con diligenza o che l'evento era inevitabile.",
+      "La responsabilità è presunta salvo prova liberatoria dell'ospedale sull'assenza di colpa organizzativa o professionale."
+    ],
+    "tags": ["responsabilita_civile", "medica"]
+  },
+  {
+    "id": "case_019",
+    "question": "Quando l'uso di un marchio altrui integra contraffazione?",
+    "gold_answer": "Vi è contraffazione quando un segno identico o simile viene usato per prodotti o servizi identici o affini in modo da generare confusione o associazione con il marchio registrato, senza autorizzazione del titolare.",
+    "gold_variants": [
+      "La riproduzione o imitazione del marchio per prodotti affini con rischio di confusione integra la violazione.",
+      "Uso non autorizzato di un segno uguale o simile che sfrutta il valore distintivo del marchio registrato costituisce contraffazione."
+    ],
+    "tags": ["proprieta_intellettuale", "marchio"]
+  },
+  {
+    "id": "case_020",
+    "question": "Qual è il regime della responsabilità del vettore per il trasporto di cose?",
+    "gold_answer": "Il vettore risponde della perdita o avaria delle cose dal momento in cui le riceve sino a quando le consegna, salvo provi che l'evento deriva da caso fortuito, vizi delle cose o forza maggiore.",
+    "gold_variants": [
+      "Responsabilità ex recepto: il vettore deve provare causa non imputabile come caso fortuito o vizio intrinseco.",
+      "Per liberarsi deve dimostrare che la perdita dipende da cause non evitabili con l'ordinaria diligenza."
+    ],
+    "tags": ["trasporti", "responsabilita_contrattuale"]
+  },
+  {
+    "id": "case_021",
+    "question": "Quando la trascrizione di un contratto preliminare è opponibile ai terzi?",
+    "gold_answer": "La trascrizione del preliminare produce effetti prenotativi per un anno dalla data convenuta per il definitivo o, in mancanza, per tre anni dalla trascrizione; entro tali termini il promissario acquirente prevale su trascrizioni o iscrizioni successive.",
+    "gold_variants": [
+      "Gli effetti prenotativi durano un anno dalla data del definitivo o tre anni dalla trascrizione se il termine è incerto.",
+      "Il promissario tutelato dalla trascrizione prevale su atti successivi se trascrive il definitivo entro i termini di legge."
+    ],
+    "tags": ["immobiliare", "trascrizione"]
+  },
+  {
+    "id": "case_022",
+    "question": "Che cosa comporta la clausola penale in un contratto?",
+    "gold_answer": "La clausola penale predetermina il risarcimento dovuto in caso di inadempimento o ritardo e consente al creditore di esigere la somma pattuita senza provare il danno, salvo il diritto di chiedere il risarcimento ulteriore se previsto.",
+    "gold_variants": [
+      "Fissa anticipatamente il danno e sostituisce la prova del pregiudizio, salvo patto diverso.",
+      "Consente al creditore di ottenere la somma concordata per il solo fatto dell'inadempimento."
+    ],
+    "tags": ["contrattuale", "clausola_penale"]
+  },
+  {
+    "id": "case_023",
+    "question": "Quali requisiti servono per l'usucapione abbreviata di beni mobili registrati?",
+    "gold_answer": "Per beni mobili registrati occorrono tre anni di possesso continuato in buona fede con titolo idoneo regolarmente trascritto; in mancanza di questi requisiti si applica il termine ordinario ventennale.",
+    "gold_variants": [
+      "Serve possesso con titolo astrattamente idoneo, trascritto e buona fede: solo così il termine scende a tre anni.",
+      "Se il titolo non è valido o manca la trascrizione, si torna al possesso ventennale."
+    ],
+    "tags": ["diritto_reale", "usucapione"]
+  },
+  {
+    "id": "case_024",
+    "question": "Quando si può chiedere la sospensione dell'esecuzione forzata?",
+    "gold_answer": "La sospensione dell'esecuzione forzata può essere chiesta dal debitore quando ricorrono gravi motivi, come la probabile fondatezza dell'opposizione o il rischio di danni irreparabili, e il giudice ritiene opportuno bloccare temporaneamente l'azione.",
+    "gold_variants": [
+      "Il giudice dell'esecuzione può sospendere se l'opposizione appare fondata o in presenza di gravi motivi.",
+      "Serve un pericolo concreto di danno e una prospettiva favorevole sull'opposizione."
+    ],
+    "tags": ["procedura_civile", "esecuzione_forzata"]
+  }
+]

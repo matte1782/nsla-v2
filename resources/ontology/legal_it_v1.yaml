@@ -1,0 +1,628 @@
+# ontology/legal_it_v1.yaml
+# Ontologia canonica per la responsabilità contrattuale italiana (diritto civile)
+# Versione: 1.0
+# Lingua: it
+# Dominio: civil_law_contractual_liability
+
+version: "1.0"
+language: "it"
+domain: "civil_law_contractual_liability"
+
+sorts:
+  Soggetto:
+    description: "Soggetto giuridico coinvolto nel rapporto obbligatorio (persona fisica o giuridica)."
+  Debitore:
+    description: "Soggetto obbligato all'adempimento della prestazione."
+  Creditore:
+    description: "Soggetto titolare della pretesa derivante dall'obbligazione."
+  Contratto:
+    description: "Accordo tra parti che genera obbligazioni contrattuali."
+  Prestazione:
+    description: "Comportamento (dare, fare o non fare) che costituisce l'oggetto dell'obbligazione."
+  Causa:
+    description: "Evento o circostanza idonea a produrre effetti giuridici."
+  Danno:
+    description: "Pregiudizio patrimoniale (danno emergente, lucro cessante) o non patrimoniale."
+  Bene:
+    description: "Entità materiale o immateriale oggetto di diritti reali."
+  BeneRegistrato:
+    description: "Bene mobile soggetto a registrazione pubblica (es. autoveicoli)."
+    extends: Bene
+  Marchio:
+    description: "Segno distintivo registrato ai sensi del Codice della Proprietà Industriale."
+    extends: Bene
+  Fonte:
+    description: "Fonte che genera l'obbligazione (es. contratto, fatto illecito, atto idoneo)."
+  Standard:
+    description: "Standard di diligenza applicabile (ordinario, professionale)."
+  Esito:
+    description: "Qualifica l'esito dell'adempimento (esatto, inesatto)."
+  Condotta:
+    description: "Comportamento attivo o omissivo rilevante giuridicamente."
+  Professionista:
+    description: "Soggetto che agisce nell'esercizio della propria attività professionale (art. 3 Codice del Consumo)."
+    extends: Debitore
+  Consumatore:
+    description: "Persona fisica che agisce per scopi estranei all'attività professionale (art. 3 Codice del Consumo)."
+    extends: Soggetto
+  Testamento:
+    description: "Atto unilaterale con cui il testatore dispone delle proprie sostanze per il tempo successivo alla morte (art. 587 c.c.)."
+  Titolo:
+    description: "Documento o atto che appare idoneo a trasferire un diritto (art. 1153 c.c.)."
+  Possesso:
+    description: "Potere sulla cosa che si manifesta in un'attività corrispondente all'esercizio della proprietà o di altro diritto reale (art. 1140 c.c.)."
+  MisuraCautelare:
+    description: "Provvedimento cautelare personale o reale nel processo penale (artt. 272 ss. c.p.p.)."
+  Pena:
+    description: "Sanzione penale principale o accessoria prevista dal Codice Penale (R.D. 19 ottobre 1930, n. 1398)."
+  Procedura:
+    description: "Sequenza di atti processuali o amministrativi (esecuzione forzata, consultazioni sindacali)."
+  StrutturaSanitaria:
+    description: "Ente ospedaliero o clinico responsabile verso il paziente in base al contratto di spedalità."
+
+predicates:
+  Obbligazione:
+    arity: 4
+    description: "Relazione giuridica in virtù della quale un soggetto (debitore) è tenuto a compiere una prestazione a favore di un altro soggetto (creditore). Secondo l'art. 1173 c.c. le obbligazioni possono derivare da contratto, fatto illecito o da ogni altro atto o fatto idoneo a produrle."
+    synonyms:
+      - "rapporto obbligatorio"
+      - "fonte dell'obbligazione"
+      - "obbligazione"
+      - "debito"
+      - "dovere giuridico"
+
+  Contratto:
+    arity: 1
+    description: "Accordo tra due o più parti volto a costituire, regolare o estinguere un rapporto giuridico patrimoniale (art. 1321 c.c.). La sua esistenza e validità sono presupposti per le obbligazioni contrattuali."
+    synonyms:
+      - "accordo"
+      - "patto"
+      - "convenzione"
+      - "contratto"
+
+  ContrattoValido:
+    arity: 2
+    description: "Il Contratto soddisfa i requisiti di validità (consenso, capacità, liceità, forma quando richiesta). Art. 1325-1352 c.c. disciplinano i requisiti e vizi del contratto."
+    synonyms:
+      - "validità del contratto"
+      - "contratto valido"
+      - "requisiti del contratto"
+    sorts:
+      - Debitore
+      - Contratto
+    roles:
+      - Debitore
+      - Contratto
+
+  HaObbligo:
+    arity: 3
+    description: "Relazione ternaria che collega il debitore, il creditore e il contratto da cui scaturisce l'obbligo. Sintetizza il fatto che il debitore ha un obbligo verso il creditore in forza di un contratto."
+    synonyms:
+      - "ha obbligo"
+      - "obbligo contrattuale"
+      - "obbligazione tra parti"
+      - "rapporto obbligatorio"
+    sorts:
+      - Debitore
+      - Creditore
+      - Contratto
+    roles:
+      - Debitore
+      - Creditore
+      - Contratto
+
+  RisoluzioneContratto:
+    arity: 2
+    description: "Estinzione del Contratto per inadempimento, mutuo dissenso, impossibilità sopravvenuta o altre cause previste dalla legge. Art. 1453-1460 c.c."
+    synonyms:
+      - "risoluzione per inadempimento"
+      - "scioglimento del contratto"
+      - "estinzione del contratto"
+
+  Prestazione:
+    arity: 1
+    description: "Comportamento (dare, fare o non fare) che costituisce l'oggetto dell'obbligazione. Il debitore è tenuto ad eseguire esattamente la prestazione convenuta."
+    synonyms:
+      - "prestazione dovuta"
+      - "oggetto dell'obbligazione"
+      - "contenuto della prestazione"
+      - "adempimento"
+
+  Esigibilita:
+    arity: 2
+    description: "La prestazione è esigibile (non sospesa da termini, condizioni o cause impeditive). L'esigibilità è presupposto per l'adempimento e per l'inadempimento."
+    synonyms:
+      - "esigibilità della prestazione"
+      - "prestazione esigibile"
+      - "maturazione del credito"
+
+  Adempimento:
+    arity: 2
+    description: "Esecuzione esatta della prestazione da parte del debitore. L'adempimento comporta l'estinzione dell'obbligazione. La diligenza richiesta per l'adempimento è quella del buon padre di famiglia; per le prestazioni professionali la diligenza si valuta con riguardo alla natura dell'attività."
+    synonyms:
+      - "esecuzione esatta"
+      - "esatto adempimento"
+      - "esecuzione della prestazione"
+    sorts:
+      - Debitore
+      - Contratto
+
+  Inadempimento:
+    arity: 2
+    description: "Mancata esecuzione o esecuzione inesatta della prestazione. Comprende l'inadempimento totale (prestazione non effettuata), parziale, quantitativo, qualitativo, definitivo o il semplice ritardo. L'inadempimento si contrappone all'esatto adempimento e fa sorgere la responsabilità contrattuale se imputabile al debitore."
+    synonyms:
+      - "mancato adempimento"
+      - "violazione del contratto"
+      - "inadempienza"
+      - "mancata esecuzione"
+    sorts:
+      - Debitore
+      - Contratto
+
+  AdempimentoInesatto:
+    arity: 2
+    description: "Esecuzione della prestazione con difformità rispetto all'esatto adempimento. Può consistere in una prestazione quantitativamente o qualitativamente diversa o nel mancato rispetto di tempo, luogo o modalità. È forma di inadempimento che può coesistere con la prestazione parzialmente eseguita."
+    synonyms:
+      - "adempimento difettoso"
+      - "esecuzione impropria"
+      - "prestazione difettosa"
+
+  Mora:
+    arity: 1
+    description: "Ritardo nell'esecuzione della prestazione oltre il termine dovuto. La mora del debitore è una forma di inadempimento che può portare al risarcimento del danno e alla risoluzione del contratto."
+    synonyms:
+      - "mora del debitore"
+      - "ritardo colpevole"
+      - "ritardo nell'adempimento"
+    sorts:
+      - Debitore
+
+  Imputabilita:
+    arity: 2
+    description: "L'Inadempimento è imputabile al Debitore (per dolo o colpa). L'art. 1218 c.c. prevede una presunzione di colpa del debitore che può liberarsi provando una causa non imputabile. La colpa richiede la violazione del dovere di diligenza."
+    synonyms:
+      - "imputabilità dell'inadempimento"
+      - "colpa del debitore"
+      - "dolo e colpa"
+
+  ResponsabilitaContrattuale:
+    arity: 3
+    description: "Responsabilità del debitore per inadempimento o ritardo. L'art. 1218 c.c. stabilisce che il debitore che non esegue esattamente la prestazione dovuta è tenuto al risarcimento del danno se non prova che l'inadempimento o il ritardo è stato determinato da impossibilità della prestazione derivante da causa a lui non imputabile. Esprime una presunzione di colpa."
+    synonyms:
+      - "responsabilità da inadempimento"
+      - "responsabilità per inadempimento"
+      - "responsabilità del debitore"
+    sorts:
+      - Debitore
+      - Creditore
+      - Contratto
+
+  CausaNonImputabile:
+    arity: 2
+    sorts:
+      - Debitore
+      - Contratto
+    description: "Evento estraneo alla sfera del debitore che rende impossibile la prestazione e che questi non avrebbe potuto evitare nemmeno usando l'ordinaria diligenza. È il presupposto liberatorio previsto dall'art. 1218 c.c., che esonera il debitore dalla responsabilità."
+    synonyms:
+      - "causa di forza maggiore"
+      - "caso fortuito"
+      - "factum principis"
+      - "impedimento non imputabile"
+
+  Impossibilita:
+    arity: 2
+    description: "Situazione in cui la prestazione diventa oggettivamente o legalmente irrealizzabile. Ai sensi dell'art. 1218 c.c. e dell'art. 1256 c.c., l'impossibilità sopravvenuta della prestazione, se non imputabile al debitore, estingue l'obbligazione e lo libera da responsabilità."
+    synonyms:
+      - "impossibilità sopravvenuta"
+      - "impossibilità oggettiva"
+      - "impossibilità legale"
+
+  Diligenza:
+    arity: 2
+    description: "Grado di cura, attenzione e perizia che il debitore deve impiegare nell'esecuzione della prestazione. L'art. 1176 c.c. prescrive che il debitore usi la diligenza del buon padre di famiglia; quando l'obbligazione è professionale, la diligenza si valuta con riguardo alla natura dell'attività."
+    synonyms:
+      - "dovere di diligenza"
+      - "cura richiesta"
+      - "perizia professionale"
+      - "diligenza del buon padre di famiglia"
+
+  NessoCausale:
+    arity: 2
+    description: "Relazione di causa tra l'inadempimento del debitore e il danno subito dal creditore. La giurisprudenza di Cassazione ha chiarito che l'art. 1218 c.c. non esonera il creditore dall'onere di dimostrare il nesso causale tra la condotta inadempiente del debitore e il danno; la prova del danno in re ipsa non basta."
+    synonyms:
+      - "rapporto di causalità"
+      - "causalità materiale"
+      - "nesso eziologico"
+      - "causa del danno"
+    sorts:
+      - Evento
+      - Danno
+
+  DannoPatrimoniale:
+    arity: 1
+    description: "Pregiudizio economico valutabile in denaro che comprende danno emergente e lucro cessante. Art. 1223 c.c. stabilisce che il risarcimento deve coprire la perdita subita e il mancato guadagno."
+    synonyms:
+      - "danno economico"
+      - "pregiudizio patrimoniale"
+      - "perdita valutabile economicamente"
+    sorts:
+      - Soggetto
+
+  DannoNonPatrimoniale:
+    arity: 1
+    description: "Prejudice non economico, non valutabile direttamente in denaro (es. danno morale, esistenziale). Nella responsabilità contrattuale è generalmente non risarcibile salvo specifiche previsioni legislative."
+    synonyms:
+      - "danno morale"
+      - "pregiudizio non economico"
+      - "danno esistenziale"
+
+  DannoEmergente:
+    arity: 1
+    description: "Voce di danno corrispondente alla perdita patrimoniale effettiva subita dal creditore. Esempi tipici sono le spese sostenute per reperire altrove la prestazione non eseguita. L'art. 1223 c.c. stabilisce che il risarcimento del danno deve comprendere la perdita subita dal creditore."
+    synonyms:
+      - "damnum emergens"
+      - "spese sostenute"
+      - "costi aggiuntivi"
+
+  LucroCessante:
+    arity: 1
+    description: "Mancato guadagno che il creditore avrebbe realizzato se l'obbligazione fosse stata adempiuta. L'art. 1223 c.c. include il mancato guadagno tra le voci risarcibili, purché sia conseguenza immediata e diretta dell'inadempimento."
+    synonyms:
+      - "mancato guadagno"
+      - "profitto non realizzato"
+      - "guadagno mancato"
+
+  Risarcimento:
+    arity: 3
+    description: "Obbligazione nascente dall'inadempimento che consiste nel pagamento di una somma di denaro per reintegrare la perdita subita e il mancato guadagno (danno emergente e lucro cessante) nella misura in cui siano conseguenza immediata e diretta. Il risarcimento è la forma tipica della responsabilità contrattuale."
+    synonyms:
+      - "risarcimento del danno"
+      - "indennizzo"
+      - "compensazione pecuniaria"
+    sorts:
+      - Debitore
+      - Creditore
+      - Danno
+
+  OnereProva:
+    arity: 2
+    description: "Regola processuale che individua il soggetto che deve provare un determinato fatto. Nella responsabilità contrattuale l'art. 1218 c.c., letto alla luce dell'art. 2697 c.c., alleggerisce la posizione del creditore: él deve provare l'esistenza del rapporto obbligatorio e il danno, mentre il debitore deve provare l'avvenuto esatto adempimento o l'impossibilità non imputabile."
+    synonyms:
+      - "onere della prova"
+      - "riparto dell'onere probatorio"
+      - "obbligo probatorio"
+
+  ObbligazioneDiMezzi:
+    arity: 1
+    description: "Classificazione delle obbligazioni secondo l'oggetto dell'impegno. Le obbligazioni di mezzi richiedono al debitore di impiegare la diligenza dovuta senza garantire un risultato specifico (es. prestazione professionale)."
+    synonyms:
+      - "obbligazione di comportamento"
+      - "obbligazione di mezzi"
+      - "prestazione di mezzi"
+
+  ObbligazioneDiRisultato:
+    arity: 1
+    description: "Classificazione delle obbligazioni secondo l'oggetto dell'impegno. Le obbligazioni di risultato comportano la promessa di un risultato determinato; l'assenza del risultato costituisce di per sé inadempimento."
+    synonyms:
+      - "obbligazione di risultato"
+      - "prestazione di risultato"
+      - "obbligazione a risultato"
+
+  TipoDanno:
+    arity: 2
+    description: "Predicato che qualifica se il danno è conseguenza immediata e diretta dell'inadempimento. Solo i danni immediati e diretti sono risarcibili ex art. 1223 c.c.; i danni remoti o indiretti restano a carico del creditore."
+    synonyms:
+      - "danno immediato e diretto"
+      - "conseguenza diretta"
+      - "danno risarcibile"
+      - "requisito della causalità diretta"
+
+  Condotta:
+    arity: 1
+    description: "Comportamento attivo (azione) o passiva (omissione) che può costituire adempimento o inadempimento dell'obbligazione. L'imputabilità della condotta è rilevante per la responsabilità contrattuale."
+    synonyms:
+      - "comportamento"
+      - "condotta del debitore"
+      - "atto o omissione"
+
+  Consenso:
+    arity: 2
+    description: "Manifestazione di volontà concorde delle parti quale elemento essenziale del contratto (artt. 1325 e 1326 c.c.)."
+    synonyms:
+      - "accordo di volontà"
+      - "consenso contrattuale"
+    sorts:
+      - Debitore
+      - Contratto
+
+  CapacitaContrattuale:
+    arity: 1
+    description: "Idoneità del soggetto a concludere validamente un contratto (art. 1425 c.c.). La sua assenza comporta annullabilità."
+    synonyms:
+      - "capacità di agire"
+      - "capacità contrattuale"
+    sorts:
+      - Soggetto
+
+  CausaLegittima:
+    arity: 1
+    description: "Funzione economico-sociale lecita del contratto (art. 1343 c.c.). L'illiceità della causa rende nullo il contratto."
+    synonyms:
+      - "causa lecita"
+      - "funzione del contratto"
+    sorts:
+      - Contratto
+
+  OggettoDeterminato:
+    arity: 1
+    description: "Oggetto possibile, lecito e determinato/determinabile (art. 1346 c.c.)."
+    synonyms:
+      - "oggetto determinato"
+      - "oggetto determinabile"
+    sorts:
+      - Contratto
+
+  FormaPrescritta:
+    arity: 1
+    description: "Forma ad substantiam richiesta dalla legge o dalle parti (artt. 1350 ss. c.c.)."
+    synonyms:
+      - "forma richiesta"
+      - "forma obbligatoria"
+    sorts:
+      - Contratto
+
+  DovereDiligenza:
+    arity: 2
+    description: "Obbligo di eseguire la prestazione con la diligenza del buon padre di famiglia o quella professionale (art. 1176 c.c.)."
+    synonyms:
+      - "dovere di diligenza"
+      - "standard professionale"
+    sorts:
+      - Debitore
+      - Prestazione
+
+  ComportamentoDiligente:
+    arity: 2
+    description: "Condotta conforme al dovere di diligenza; la sua assenza può integrare colpa."
+    synonyms:
+      - "condotta diligente"
+      - "cura professionale"
+    sorts:
+      - Debitore
+      - Prestazione
+
+  Colpa:
+    arity: 2
+    description: "Violazione del dovere di diligenza che rende imputabile l'evento dannoso al debitore (artt. 1218 e 2043 c.c.)."
+    synonyms:
+      - "colpa civile"
+      - "negligenza"
+    sorts:
+      - Debitore
+      - Evento
+
+  ResponsabileColpa:
+    arity: 2
+    description: "Predicato ausiliario per indicare che il soggetto è responsabile per colpa di un danno specifico."
+    synonyms:
+      - "responsabilità per colpa"
+    sorts:
+      - Debitore
+      - Danno
+
+  DifettoConformita:
+    arity: 1
+    description: "Difetto del bene venduto rispetto al contratto ai sensi degli artt. 129 ss. Codice del Consumo."
+    synonyms:
+      - "difetto di conformità"
+    sorts:
+      - Bene
+
+  DirittoSceltaRemedy:
+    arity: 2
+    description: "Diritto del consumatore di scegliere tra riparazione, sostituzione, riduzione del prezzo o risoluzione (art. 130 Codice del Consumo)."
+    synonyms:
+      - "diritti garanzia legale"
+    sorts:
+      - Consumatore
+      - Bene
+
+  ContrattoAdesione:
+    arity: 1
+    description: "Contratto le cui clausole sono predisposte unilateralmente dal professionista e il consumatore può solo aderire (art. 1341 c.c.)."
+    synonyms:
+      - "contratto di adesione"
+    sorts:
+      - Contratto
+
+  PredeterminatoDa:
+    arity: 2
+    description: "Clausole predeterminate dal professionista nel contratto di adesione."
+    synonyms:
+      - "predisposto da"
+    sorts:
+      - Contratto
+      - Professionista
+
+  NonNegoziabileDa:
+    arity: 2
+    description: "Clausole che il consumatore non può negoziare o modificare."
+    synonyms:
+      - "non negoziabile"
+    sorts:
+      - Contratto
+      - Consumatore
+
+  PuoSoloAccettareOppureRifiutare:
+    arity: 2
+    description: "Il consumatore può solo accettare integralmente o rifiutare il contratto (tipico dell'adesione)."
+    synonyms:
+      - "take it or leave it"
+    sorts:
+      - Consumatore
+      - Contratto
+
+  TrascrizioneOpponibileATerzi:
+    arity: 1
+    description: "La trascrizione del preliminare produce effetti prenotativi opponibili (art. 2645-bis c.c.)."
+    synonyms:
+      - "opponibilità della trascrizione"
+    sorts:
+      - Contratto
+
+  PossessoContinuato:
+    arity: 2
+    description: "Possesso continuo e non interrotto di un bene (art. 1158 c.c.)."
+    synonyms:
+      - "possesso continuativo"
+    sorts:
+      - Soggetto
+      - Bene
+
+  PossessoPubblico:
+    arity: 2
+    description: "Possesso pacifico e manifesto richiesto per l'usucapione (art. 1158 c.c.)."
+    synonyms:
+      - "possesso pubblico"
+    sorts:
+      - Soggetto
+      - Bene
+
+  BuonaFede:
+    arity: 1
+    description: "Convinzione ragionevole di essere legittimo proprietario (art. 1147 c.c.)."
+    synonyms:
+      - "buona fede nel possesso"
+    sorts:
+      - Soggetto
+
+  TitoloIdoneo:
+    arity: 2
+    description: "Titolo astrattamente idoneo al trasferimento, anche se inefficace (art. 1153 c.c.)."
+    synonyms:
+      - "titolo astrattamente valido"
+    sorts:
+      - Titolo
+      - BeneRegistrato
+
+  UsucapioneOrdinaria:
+    arity: 2
+    description: "Acquisto della proprietà per possesso ventennale pubblico, pacifico e continuo (art. 1158 c.c.)."
+    synonyms:
+      - "usucapione ventennale"
+    sorts:
+      - Soggetto
+      - Bene
+
+  UsucapioneAbbreviata:
+    arity: 2
+    description: "Acquisto abbreviato di beni mobili registrati con titolo e buona fede (art. 1153 c.c.)."
+    synonyms:
+      - "usucapione biennale"
+    sorts:
+      - Soggetto
+      - BeneRegistrato
+
+  Riciclaggio:
+    arity: 1
+    description: "Condotta di sostituzione/trasferimento di proventi illeciti per ostacolare l'identificazione (art. 648-bis c.p., R.D. 19 ottobre 1930, n. 1398)."
+    synonyms:
+      - "lavaggio di denaro"
+    sorts:
+      - Soggetto
+
+  ContraffazioneMarchio:
+    arity: 2
+    description: "Uso di un marchio altrui idoneo a generare confusione (art. 473 c.p. e art. 20 Codice Proprietà Industriale)."
+    synonyms:
+      - "contraffazione di marchio"
+    sorts:
+      - Soggetto
+      - Marchio
+
+  MisuraCautelarePersonale:
+    arity: 1
+    description: "Applicazione di una misura cautelare personale (custodia cautelare, obbligo di firma) ex artt. 281 ss. c.p.p."
+    synonyms:
+      - "misura personale"
+    sorts:
+      - MisuraCautelare
+
+  MisuraCautelareReale:
+    arity: 1
+    description: "Applicazione di una misura cautelare reale (sequestro, confisca) ex artt. 316 ss. c.p.p."
+    synonyms:
+      - "misura reale"
+    sorts:
+      - MisuraCautelare
+
+  Multa:
+    arity: 1
+    description: "Pena pecuniaria prevista per i delitti (art. 17 c.p., R.D. 19 ottobre 1930, n. 1398)."
+    synonyms:
+      - "pena pecuniaria per delitti"
+    sorts:
+      - Pena
+
+  Ammenda:
+    arity: 1
+    description: "Pena pecuniaria prevista per le contravvenzioni (art. 17 c.p.)."
+    synonyms:
+      - "pena pecuniaria per contravvenzioni"
+    sorts:
+      - Pena
+
+  RisarcimentoIllecito:
+    arity: 3
+    description: "Obbligo risarcitorio da fatto illecito extra-contrattuale (art. 2043 c.c.)."
+    synonyms:
+      - "responsabilità aquiliana"
+    sorts:
+      - Soggetto
+      - Soggetto
+      - Danno
+
+  ResponsabilitaCivileColpa:
+    arity: 2
+    description: "Responsabilità civile per colpa (art. 2043 c.c.)."
+    synonyms:
+      - "responsabilità del fatto illecito"
+    sorts:
+      - Soggetto
+      - Danno
+
+  ResponsabilitaMedicaContrattuale:
+    arity: 2
+    description: "Responsabilità contrattuale della struttura sanitaria verso il paziente (Cass. SS.UU. 577/2008)."
+    synonyms:
+      - "responsabilità medica"
+    sorts:
+      - StrutturaSanitaria
+      - Soggetto
+
+  GaranziaLegaleBiennale:
+    arity: 2
+    description: "Garanzia legale di conformità di due anni dalla consegna (art. 132 Codice del Consumo)."
+    synonyms:
+      - "garanzia legale"
+    sorts:
+      - Professionista
+      - Consumatore
+
+  TrasportoResponsabilitaVettore:
+    arity: 3
+    description: "Responsabilità del vettore per perdita o avaria (art. 1693 c.c.)."
+    synonyms:
+      - "responsabilità vettore"
+    sorts:
+      - Soggetto
+      - Soggetto
+      - Bene
+
+  SospensioneEsecuzioneForzata:
+    arity: 1
+    description: "Provvedimento che sospende temporaneamente l'esecuzione forzata (art. 624 c.p.c.)."
+    synonyms:
+      - "sospensione esecuzione"
+    sorts:
+      - Procedura

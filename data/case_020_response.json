@@ -1,0 +1,378 @@
+{
+  "mode": "v2_single",
+  "final_answer": "YES \u2013 la responsabilit\u00e0 contrattuale del vettore \u00e8 dimostrabile perch\u00e9 ha un obbligo verso il mandante, \u00e8 inadempiente, il danno patrimoniale al creditore \u00e8 provato e vi \u00e8 nesso causale tra l'evento di inadempimento e il danno, senza alcuna causa non imputabile al vettore.\n\nRequisiti simbolici soddisfatti: HaObbligo, Inadempimento, DannoPatrimoniale, NessoCausale, TrasportoResponsabilitaVettore, CausaNonImputabile, ResponsabilitaContrattuale.",
+  "logic_program": {
+    "dsl_version": "2.1",
+    "sorts": {
+      "Debitore": {
+        "type": "Entity"
+      },
+      "Creditore": {
+        "type": "Entity"
+      },
+      "Contratto": {
+        "type": "Entity"
+      },
+      "Danno": {
+        "type": "Entity"
+      },
+      "Bene": {
+        "type": "Entity"
+      },
+      "Soggetto": {
+        "description": "Soggetto giuridico coinvolto nel rapporto obbligatorio (persona fisica o giuridica).",
+        "type": "Entity"
+      },
+      "Evento": {
+        "type": "Entity"
+      }
+    },
+    "constants": {
+      "vettore": {
+        "sort": "Debitore"
+      },
+      "mandante": {
+        "sort": "Creditore"
+      },
+      "contrTrasporto": {
+        "sort": "Contratto"
+      },
+      "bene": {
+        "sort": "Bene"
+      },
+      "soggetto_1": {
+        "sort": "Soggetto"
+      },
+      "eventoInadempimento": {
+        "sort": "Evento"
+      },
+      "altDeb": {
+        "sort": "Debitore"
+      },
+      "altContr": {
+        "sort": "Contratto"
+      },
+      "danno_2": {
+        "sort": "Danno"
+      }
+    },
+    "predicates": {
+      "HaObbligo": {
+        "arity": 3,
+        "sorts": [
+          "Debitore",
+          "Creditore",
+          "Contratto"
+        ]
+      },
+      "Inadempimento": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      },
+      "DannoPatrimoniale": {
+        "arity": 1,
+        "sorts": [
+          "Soggetto"
+        ]
+      },
+      "NessoCausale": {
+        "arity": 2,
+        "sorts": [
+          "Evento",
+          "Danno"
+        ]
+      },
+      "CausaNonImputabile": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      },
+      "ResponsabilitaContrattuale": {
+        "arity": 3,
+        "sorts": [
+          "Debitore",
+          "Creditore",
+          "Contratto"
+        ]
+      },
+      "TrasportoResponsabilitaVettore": {
+        "arity": 3,
+        "sorts": [
+          "Soggetto",
+          "Soggetto",
+          "Bene"
+        ]
+      }
+    },
+    "facts": {},
+    "axioms": [
+      {
+        "formula": "HaObbligo(vettore, mandante, contrTrasporto)"
+      },
+      {
+        "formula": "Inadempimento(vettore, contrTrasporto)"
+      },
+      {
+        "formula": "DannoPatrimoniale(soggetto_1)"
+      },
+      {
+        "formula": "NessoCausale(eventoInadempimento, soggetto_1)"
+      },
+      {
+        "formula": "TrasportoResponsabilitaVettore(vettore, mandante, bene)"
+      },
+      {
+        "formula": "CausaNonImputabile(altDeb, altContr)"
+      },
+      {
+        "formula": "NessoCausale(eventoInadempimento, danno_2)"
+      },
+      {
+        "formula": "CausaNonImputabile(vettore, contrTrasporto)"
+      }
+    ],
+    "rules": [
+      {
+        "condition": "(and HaObbligo(vettore, mandante, contrTrasporto) Inadempimento(vettore, contrTrasporto) DannoPatrimoniale(soggetto_1) NessoCausale(eventoInadempimento, soggetto_1) (not CausaNonImputabile(vettore, contrTrasporto)))",
+        "conclusion": "ResponsabilitaContrattuale(vettore, mandante, contrTrasporto)",
+        "id": null
+      }
+    ],
+    "query": "ResponsabilitaContrattuale(vettore, mandante, contrTrasporto)"
+  },
+  "feedback": {
+    "status": "consistent_no_entailment",
+    "missing_links": [
+      "HaObbligo",
+      "Inadempimento",
+      "DannoPatrimoniale",
+      "NessoCausale",
+      "CausaNonImputabile"
+    ],
+    "conflicting_axioms": [],
+    "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+  },
+  "phase2": {
+    "canonicalization": {
+      "question": "...",
+      "language": "it",
+      "domain": "civil_law_contractual_liability",
+      "concepts": [
+        {
+          "text": "responsabilit\u00e0 del vettore",
+          "canonical_predicate": "TrasportoResponsabilitaVettore",
+          "confidence": 0.92,
+          "notes": null
+        }
+      ],
+      "unmapped_terms": [
+        {
+          "text": "regime della responsabilit\u00e0",
+          "reason": "unknown"
+        },
+        {
+          "text": "trasporto di cose",
+          "reason": "unknown"
+        }
+      ]
+    },
+    "logic_program_v1": {
+      "dsl_version": "2.1",
+      "sorts": {
+        "Debitore": {
+          "type": "Entity"
+        },
+        "Creditore": {
+          "type": "Entity"
+        },
+        "Contratto": {
+          "type": "Entity"
+        },
+        "Danno": {
+          "type": "Entity"
+        },
+        "Bene": {
+          "type": "Entity"
+        },
+        "Soggetto": {
+          "description": "Soggetto giuridico coinvolto nel rapporto obbligatorio (persona fisica o giuridica).",
+          "type": "Entity"
+        },
+        "Evento": {
+          "type": "Entity"
+        }
+      },
+      "constants": {
+        "vettore": {
+          "sort": "Debitore"
+        },
+        "mandante": {
+          "sort": "Creditore"
+        },
+        "contrTrasporto": {
+          "sort": "Contratto"
+        },
+        "bene": {
+          "sort": "Bene"
+        },
+        "danno": {
+          "sort": "Danno"
+        },
+        "soggetto_1": {
+          "sort": "Soggetto"
+        },
+        "evento_1": {
+          "sort": "Evento"
+        }
+      },
+      "predicates": {
+        "HaObbligo": {
+          "arity": 3,
+          "sorts": [
+            "Debitore",
+            "Creditore",
+            "Contratto"
+          ]
+        },
+        "Inadempimento": {
+          "arity": 2,
+          "sorts": [
+            "Debitore",
+            "Contratto"
+          ]
+        },
+        "DannoPatrimoniale": {
+          "arity": 1,
+          "sorts": [
+            "Soggetto"
+          ]
+        },
+        "NessoCausale": {
+          "arity": 2,
+          "sorts": [
+            "Evento",
+            "Danno"
+          ]
+        },
+        "CausaNonImputabile": {
+          "arity": 2,
+          "sorts": [
+            "Debitore",
+            "Contratto"
+          ]
+        },
+        "ResponsabilitaContrattuale": {
+          "arity": 3,
+          "sorts": [
+            "Debitore",
+            "Creditore",
+            "Contratto"
+          ]
+        },
+        "TrasportoResponsabilitaVettore": {
+          "arity": 3,
+          "sorts": [
+            "Soggetto",
+            "Soggetto",
+            "Bene"
+          ]
+        }
+      },
+      "facts": {},
+      "axioms": [
+        {
+          "formula": "HaObbligo(vettore, mandante, contrTrasporto)"
+        },
+        {
+          "formula": "Inadempimento(vettore, contrTrasporto)"
+        },
+        {
+          "formula": "DannoPatrimoniale(danno)"
+        },
+        {
+          "formula": "NessoCausale(Inadempimento(vettore, contrTrasporto), danno)"
+        },
+        {
+          "formula": "TrasportoResponsabilitaVettore(vettore, mandante, bene)"
+        },
+        {
+          "formula": "DannoPatrimoniale(soggetto_1)"
+        },
+        {
+          "formula": "NessoCausale(evento_1, danno)"
+        },
+        {
+          "formula": "CausaNonImputabile(vettore, contrTrasporto)"
+        }
+      ],
+      "rules": [
+        {
+          "condition": "(and HaObbligo(vettore, mandante, contrTrasporto) Inadempimento(vettore, contrTrasporto) DannoPatrimoniale(danno) NessoCausale(Inadempimento(vettore, contrTrasporto), danno) (not CausaNonImputabile(vettore, contrTrasporto)))",
+          "conclusion": "ResponsabilitaContrattuale(vettore, mandante, contrTrasporto)",
+          "id": null
+        }
+      ],
+      "query": "ResponsabilitaContrattuale(vettore, mandante, contrTrasporto)"
+    },
+    "feedback_v1": {
+      "status": "consistent_no_entailment",
+      "missing_links": [
+        "HaObbligo",
+        "Inadempimento",
+        "DannoPatrimoniale",
+        "NessoCausale",
+        "CausaNonImputabile"
+      ],
+      "conflicting_axioms": [],
+      "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+    },
+    "answer_v1": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Qual e il regime della responsabilita del vettore per il trasporto di cose?'."
+  },
+  "guardrail": {
+    "ok": true,
+    "issues": []
+  },
+  "explanation": {
+    "summary": "Il programma logico \u00e8 coerente ma non implica ancora la conclusione. Mancano collegamenti o premesse aggiuntive. Feedback sintetico: Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile.",
+    "status": "consistent_no_entailment",
+    "details": {
+      "question": "Qual e il regime della responsabilita del vettore per il trasporto di cose?",
+      "final_answer": "YES \u2013 la responsabilit\u00e0 contrattuale del vettore \u00e8 dimostrabile perch\u00e9 ha un obbligo verso il mandante, \u00e8 inadempiente, il danno patrimoniale al creditore \u00e8 provato e vi \u00e8 nesso causale tra l'evento di inadempimento e il danno, senza alcuna causa non imputabile al vettore.\n\nRequisiti simbolici soddisfatti: HaObbligo, Inadempimento, DannoPatrimoniale, NessoCausale, TrasportoResponsabilitaVettore, CausaNonImputabile, ResponsabilitaContrattuale.",
+      "missing_links": [
+        "HaObbligo",
+        "Inadempimento",
+        "DannoPatrimoniale",
+        "NessoCausale",
+        "CausaNonImputabile"
+      ],
+      "conflicting_axioms": []
+    }
+  },
+  "structured_stats": {
+    "predicates_total": 7,
+    "rules_total": 1
+  },
+  "llm_status": {
+    "Canonicalizer": "ok",
+    "Structured Extractor": "ok",
+    "Refinement LLM": "ok"
+  },
+  "judge": {
+    "question": "Qual e il regime della responsabilita del vettore per il trasporto di cose?",
+    "reference_answer": "Il vettore risponde della perdita o avaria delle cose dal momento in cui le riceve sino alla consegna, salvo provi che l'evento deriva da caso fortuito, vizio della cosa o forza maggiore.",
+    "answer_a": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Qual e il regime della responsabilita del vettore per il trasporto di cose?'.",
+    "answer_b": "YES \u2013 la responsabilit\u00e0 contrattuale del vettore \u00e8 dimostrabile perch\u00e9 ha un obbligo verso il mandante, \u00e8 inadempiente, il danno patrimoniale al creditore \u00e8 provato e vi \u00e8 nesso causale tra l'evento di inadempimento e il danno, senza alcuna causa non imputabile al vettore.\n\nRequisiti simbolici soddisfatti: HaObbligo, Inadempimento, DannoPatrimoniale, NessoCausale, TrasportoResponsabilitaVettore, CausaNonImputabile, ResponsabilitaContrattuale.",
+    "label_a": "baseline_v1",
+    "label_b": "nsla_v2",
+    "vote": "tie",
+    "confidence": 0.0,
+    "rationale": "Judge metric disabled."
+  },
+  "fallback_used": false,
+  "fallback_feedback": null
+}

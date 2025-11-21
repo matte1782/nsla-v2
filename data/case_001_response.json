@@ -1,0 +1,198 @@
+{
+  "mode": "v2_single",
+  "final_answer": "SI \u2013 il contratto \u00e8 valido perch\u00e9 sono presenti tutti gli elementi richiesti dalla legge (consenso, capacit\u00e0 contrattuale, causa lecita, oggetto determinato e forma prescritta).\n\nRequisiti simbolici soddisfatti: Consenso, CapacitaContrattuale, CausaLegittima, OggettoDeterminato, FormaPrescritta, ContrattoValido.",
+  "logic_program": {
+    "dsl_version": "2.1",
+    "sorts": {
+      "Debitore": {
+        "description": "Soggetto obbligato nell'ambito del contratto.",
+        "type": "Entity"
+      },
+      "Contratto": {
+        "description": "Accordo che genera obbligazioni.",
+        "type": "Entity"
+      },
+      "Soggetto": {
+        "description": "Persona fisica o giuridica.",
+        "type": "Entity"
+      }
+    },
+    "constants": {
+      "deb": {
+        "sort": "Debitore"
+      },
+      "contratto_1": {
+        "sort": "Contratto"
+      },
+      "parteA": {
+        "sort": "Soggetto"
+      }
+    },
+    "predicates": {
+      "Consenso": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      },
+      "CapacitaContrattuale": {
+        "arity": 1,
+        "sorts": [
+          "Soggetto"
+        ]
+      },
+      "CausaLegittima": {
+        "arity": 1,
+        "sorts": [
+          "Contratto"
+        ]
+      },
+      "OggettoDeterminato": {
+        "arity": 1,
+        "sorts": [
+          "Contratto"
+        ]
+      },
+      "FormaPrescritta": {
+        "arity": 1,
+        "sorts": [
+          "Contratto"
+        ]
+      },
+      "ContrattoValido": {
+        "arity": 2,
+        "sorts": [
+          "Debitore",
+          "Contratto"
+        ]
+      }
+    },
+    "facts": {},
+    "axioms": [
+      {
+        "formula": "Consenso(deb, contratto_1)"
+      },
+      {
+        "formula": "CapacitaContrattuale(parteA)"
+      },
+      {
+        "formula": "CausaLegittima(contratto_1)"
+      },
+      {
+        "formula": "OggettoDeterminato(contratto_1)"
+      },
+      {
+        "formula": "FormaPrescritta(contratto_1)"
+      }
+    ],
+    "rules": [
+      {
+        "condition": "(and Consenso(deb, contratto_1) CapacitaContrattuale(parteA) CausaLegittima(contratto_1) OggettoDeterminato(contratto_1) FormaPrescritta(contratto_1))",
+        "conclusion": "ContrattoValido(deb, contratto_1)",
+        "id": null
+      },
+      {
+        "condition": "(and Consenso(deb, contratto_1) CapacitaContrattuale(deb) CausaLegittima(contratto_1) OggettoDeterminato(contratto_1) FormaPrescritta(contratto_1))",
+        "conclusion": "ContrattoValido(deb,contratto_1)"
+      }
+    ],
+    "query": "ContrattoValido(deb,contratto_1)"
+  },
+  "feedback": {
+    "status": "consistent_no_entailment",
+    "missing_links": [
+      "Consenso",
+      "CapacitaContrattuale",
+      "CausaLegittima",
+      "OggettoDeterminato",
+      "FormaPrescritta"
+    ],
+    "conflicting_axioms": [],
+    "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+  },
+  "phase2": {
+    "canonicalization": {
+      "question": "...",
+      "language": "it",
+      "domain": "civil_law_contractual_liability",
+      "concepts": [
+        {
+          "text": "contratto valido",
+          "canonical_predicate": "ContrattoValido",
+          "confidence": 0.96,
+          "notes": null
+        }
+      ],
+      "unmapped_terms": [
+        {
+          "text": "elementi costitutivi",
+          "reason": "unknown"
+        },
+        {
+          "text": "diritto italiano",
+          "reason": "unknown"
+        }
+      ]
+    },
+    "logic_program_v1": {
+      "dsl_version": "2.1",
+      "sorts": {},
+      "constants": {},
+      "predicates": {},
+      "facts": {},
+      "axioms": [],
+      "rules": [],
+      "query": null
+    },
+    "feedback_v1": {
+      "status": "consistent_no_entailment",
+      "missing_links": [],
+      "conflicting_axioms": [],
+      "human_summary": "Il sistema \u00e8 coerente ma non \u00e8 stata richiesta alcuna conclusione."
+    },
+    "answer_v1": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Quali sono gli elementi costitutivi di un contratto valido secondo il diritto italiano?'."
+  },
+  "guardrail": {
+    "ok": true,
+    "issues": []
+  },
+  "explanation": {
+    "summary": "Il programma logico \u00e8 coerente ma non implica ancora la conclusione. Mancano collegamenti o premesse aggiuntive. Feedback sintetico: Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile.",
+    "status": "consistent_no_entailment",
+    "details": {
+      "question": "Quali sono gli elementi costitutivi di un contratto valido secondo il diritto italiano?",
+      "final_answer": "SI \u2013 il contratto \u00e8 valido perch\u00e9 sono presenti tutti gli elementi richiesti dalla legge (consenso, capacit\u00e0 contrattuale, causa lecita, oggetto determinato e forma prescritta).\n\nRequisiti simbolici soddisfatti: Consenso, CapacitaContrattuale, CausaLegittima, OggettoDeterminato, FormaPrescritta, ContrattoValido.",
+      "missing_links": [
+        "Consenso",
+        "CapacitaContrattuale",
+        "CausaLegittima",
+        "OggettoDeterminato",
+        "FormaPrescritta"
+      ],
+      "conflicting_axioms": []
+    }
+  },
+  "structured_stats": {
+    "predicates_total": 0,
+    "rules_total": 0
+  },
+  "llm_status": {
+    "Canonicalizer": "ok",
+    "Structured Extractor": "ok",
+    "Refinement LLM": "ok"
+  },
+  "judge": {
+    "question": "Quali sono gli elementi costitutivi di un contratto valido secondo il diritto italiano?",
+    "reference_answer": "Un contratto \u00e8 valido solo se sussistono cinque requisiti: accordo tra le parti, causa lecita, oggetto possibile e determinato, forma prescritta quando richiesta e capacit\u00e0 delle parti.",
+    "answer_a": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'Quali sono gli elementi costitutivi di un contratto valido secondo il diritto italiano?'.",
+    "answer_b": "SI \u2013 il contratto \u00e8 valido perch\u00e9 sono presenti tutti gli elementi richiesti dalla legge (consenso, capacit\u00e0 contrattuale, causa lecita, oggetto determinato e forma prescritta).\n\nRequisiti simbolici soddisfatti: Consenso, CapacitaContrattuale, CausaLegittima, OggettoDeterminato, FormaPrescritta, ContrattoValido.",
+    "label_a": "baseline_v1",
+    "label_b": "nsla_v2",
+    "vote": "tie",
+    "confidence": 0.0,
+    "rationale": "Judge metric disabled."
+  },
+  "fallback_used": false,
+  "fallback_feedback": null
+}

@@ -1,0 +1,170 @@
+{
+  "mode": "v2_single",
+  "final_answer": "SI \u2013 l'usucapione ordinaria per i beni immobili si realizza con possesso continuo, pubblico e buona fede per almeno venti anni, che conferisce il diritto di propriet\u00e0.\n\nRequisiti simbolici soddisfatti: PossessoContinuato, PossessoPubblico, BuonaFede, UsucapioneOrdinaria.",
+  "logic_program": {
+    "dsl_version": "2.1",
+    "sorts": {
+      "Soggetto": {
+        "description": "Soggetto giuridico (persona fisica o giuridica)",
+        "type": "Entity"
+      },
+      "Bene": {
+        "description": "Entit\u00e0 materiale oggetto di diritti reali",
+        "type": "Entity"
+      }
+    },
+    "constants": {
+      "possessore": {
+        "sort": "Soggetto"
+      },
+      "casa": {
+        "sort": "Bene"
+      }
+    },
+    "predicates": {
+      "PossessoContinuato": {
+        "arity": 2,
+        "sorts": [
+          "Soggetto",
+          "Bene"
+        ],
+        "description": "Possesso continuo e non interrotto di un bene (art. 1158 c.c.)"
+      },
+      "PossessoPubblico": {
+        "arity": 2,
+        "sorts": [
+          "Soggetto",
+          "Bene"
+        ],
+        "description": "Possesso pacifico e manifesto richiesto per l'usucapione (art. 1158 c.c.)"
+      },
+      "BuonaFede": {
+        "arity": 1,
+        "sorts": [
+          "Soggetto"
+        ],
+        "description": "Convinzione ragionevole di essere legittimo proprietario (art. 1147 c.c.)"
+      },
+      "UsucapioneOrdinaria": {
+        "arity": 2,
+        "sorts": [
+          "Soggetto",
+          "Bene"
+        ],
+        "description": "Acquisizione della propriet\u00e0 per possesso ventennale pubblico, pacifico e continuo (art. 1158 c.c.)"
+      }
+    },
+    "facts": {},
+    "axioms": [
+      {
+        "formula": "PossessoContinuato(possessore, casa)"
+      },
+      {
+        "formula": "PossessoPubblico(possessore, casa)"
+      },
+      {
+        "formula": "BuonaFede(possessore)"
+      }
+    ],
+    "rules": [
+      {
+        "condition": "(and PossessoContinuato(?s, ?b) PossessoPubblico(?s, ?b) BuonaFede(?s))",
+        "conclusion": "UsucapioneOrdinaria(?s, ?b)",
+        "id": null
+      },
+      {
+        "condition": "(and PossessoContinuato(possessore, casa) PossessoPubblico(possessore, casa) BuonaFede(possessore))",
+        "conclusion": "UsucapioneOrdinaria(possessore, casa)"
+      }
+    ],
+    "query": "UsucapioneOrdinaria(possessore, casa)"
+  },
+  "feedback": {
+    "status": "consistent_no_entailment",
+    "missing_links": [
+      "PossessoContinuato",
+      "PossessoPubblico",
+      "BuonaFede"
+    ],
+    "conflicting_axioms": [],
+    "human_summary": "Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile."
+  },
+  "phase2": {
+    "canonicalization": {
+      "question": "In cosa consiste l'usucapione per i beni immobili?",
+      "language": "it",
+      "domain": "civil_law_contractual_liability",
+      "concepts": [
+        {
+          "text": "usucapione per i beni immobili",
+          "canonical_predicate": "UsucapioneOrdinaria",
+          "confidence": 0.95,
+          "notes": null
+        }
+      ],
+      "unmapped_terms": [
+        {
+          "text": "beni immobili",
+          "reason": "unknown"
+        }
+      ]
+    },
+    "logic_program_v1": {
+      "dsl_version": "2.1",
+      "sorts": {},
+      "constants": {},
+      "predicates": {},
+      "facts": {},
+      "axioms": [],
+      "rules": [],
+      "query": null
+    },
+    "feedback_v1": {
+      "status": "consistent_no_entailment",
+      "missing_links": [],
+      "conflicting_axioms": [],
+      "human_summary": "Il sistema \u00e8 coerente ma non \u00e8 stata richiesta alcuna conclusione."
+    },
+    "answer_v1": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'In cosa consiste l'usucapione per i beni immobili?'."
+  },
+  "guardrail": {
+    "ok": true,
+    "issues": []
+  },
+  "explanation": {
+    "summary": "Il programma logico \u00e8 coerente ma non implica ancora la conclusione. Mancano collegamenti o premesse aggiuntive. Feedback sintetico: Il sistema \u00e8 coerente ma la conclusione non \u00e8 dimostrabile.",
+    "status": "consistent_no_entailment",
+    "details": {
+      "question": "In cosa consiste l'usucapione per i beni immobili?",
+      "final_answer": "SI \u2013 l'usucapione ordinaria per i beni immobili si realizza con possesso continuo, pubblico e buona fede per almeno venti anni, che conferisce il diritto di propriet\u00e0.\n\nRequisiti simbolici soddisfatti: PossessoContinuato, PossessoPubblico, BuonaFede, UsucapioneOrdinaria.",
+      "missing_links": [
+        "PossessoContinuato",
+        "PossessoPubblico",
+        "BuonaFede"
+      ],
+      "conflicting_axioms": []
+    }
+  },
+  "structured_stats": {
+    "predicates_total": 0,
+    "rules_total": 0
+  },
+  "llm_status": {
+    "Canonicalizer": "ok",
+    "Structured Extractor": "ok",
+    "Refinement LLM": "ok"
+  },
+  "judge": {
+    "question": "In cosa consiste l'usucapione per i beni immobili?",
+    "reference_answer": "L'usucapione immobiliare consente di acquistare la proprieta per effetto di un possesso pubblico, pacifico, ininterrotto e con animus domini protratto per vent'anni, salvo termini abbreviati previsti dalla legge.",
+    "answer_a": "Risposta generica (modalit\u00e0 dummy) alla domanda: 'In cosa consiste l'usucapione per i beni immobili?'.",
+    "answer_b": "SI \u2013 l'usucapione ordinaria per i beni immobili si realizza con possesso continuo, pubblico e buona fede per almeno venti anni, che conferisce il diritto di propriet\u00e0.\n\nRequisiti simbolici soddisfatti: PossessoContinuato, PossessoPubblico, BuonaFede, UsucapioneOrdinaria.",
+    "label_a": "baseline_v1",
+    "label_b": "nsla_v2",
+    "vote": "tie",
+    "confidence": 0.0,
+    "rationale": "Judge metric disabled."
+  },
+  "fallback_used": false,
+  "fallback_feedback": null
+}

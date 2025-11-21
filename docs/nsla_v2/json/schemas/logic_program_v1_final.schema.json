@@ -1,0 +1,86 @@
+{
+  "logic_program_v1_final": {
+    "dsl_version": "2.1",
+    "sorts": {
+      "Debitore": "Soggetto obbligato all'adempimento",
+      "Creditore": "Soggetto titolare della pretesa contrattuale",
+      "Contratto": "Accordo che genera obbligazioni",
+      "Danno": "Pregiudizio economico derivante dall'inadempimento"
+    },
+    "constants": {
+      "Cliente": "Creditore",
+      "Professionista": "Debitore",
+      "ContrattoServizi": "Contratto",
+      "DannoEconomico": "Danno"
+    },
+    "predicates": {
+      "Contratto": {
+        "arity": 1,
+        "args": ["Contratto"],
+        "description": "Esistenza di un contratto"
+      },
+      "Inadempimento": {
+        "arity": 2,
+        "args": ["Debitore", "Contratto"],
+        "description": "Il debitore non adempie alla prestazione contrattuale"
+      },
+      "DannoPatrimoniale": {
+        "arity": 1,
+        "args": ["Soggetto"],
+        "description": "Il soggetto subisce un danno economico"
+      },
+      "NessoCausale": {
+        "arity": 2,
+        "args": ["Inadempimento", "Danno"],
+        "description": "Relazione causale tra inadempimento e danno"
+      },
+      "ResponsabilitaContrattuale": {
+        "arity": 3,
+        "args": ["Debitore", "Creditore", "Danno"],
+        "description": "Responsabilità del debitore per inadempimento contrattuale"
+      },
+      "Mora": {
+        "arity": 1,
+        "args": ["Debitore"],
+        "description": "Ritardo nell'adempimento del debitore"
+      },
+      "Imputabilita": {
+        "arity": 2,
+        "args": ["Debitore", "Inadempimento"],
+        "description": "Inadempimento imputabile al debitore"
+      }
+    },
+    "axioms": [
+      {
+        "id": "a1",
+        "formula": "(implies (and (Contratto ContrattoServizi) (Inadempimento Professionista ContrattoServizi)) (Imputabilita Professionista Inadempimento))",
+        "description": "Presunzione di colpa del debitore in caso di inadempimento (art. 1218 c.c.)"
+      }
+    ],
+    "rules": [
+      {
+        "id": "r1",
+        "condition": "(and (Contratto ContrattoServizi) (Inadempimento Professionista ContrattoServizi) (DannoPatrimoniale Cliente) (NessoCausale Inadempimento DannoEconomico))",
+        "conclusion": "(ResponsabilitaContrattuale Professionista Cliente DannoEconomico)",
+        "description": "Responsabilità contrattuale per inadempimento con danno e nesso causale"
+      },
+      {
+        "id": "r2",
+        "condition": "(and (Mora Professionista) (DannoPatrimoniale Cliente))",
+        "conclusion": "(Inadempimento Professionista ContrattoServizi)",
+        "description": "La mora costituisce forma di inadempimento"
+      }
+    ],
+    "query": "(ResponsabilitaContrattuale Professionista Cliente DannoEconomico)"
+  },
+  "fix_report": [
+    "Removed non-DSL v2.1 fields: 'language', 'ontology_version', 'facts' to comply with DSL specification",
+    "Added missing predicate definition for 'Mora' with correct arity 1 from ontology",
+    "Added missing predicate definition for 'Imputabilita' with correct arity 2 from ontology",
+    "Fixed query structure from nested object to string formula as required by DSL v2.1",
+    "Simplified axiom a1 formula to avoid complex variable nesting while preserving legal meaning",
+    "Fixed NessoCausale predicate usage in rule r1 to use atomic arguments instead of nested terms",
+    "Ensured all predicate names and arities exactly match ontology/legal_it_v1.yaml definitions",
+    "Maintained original legal reasoning structure while ensuring technical compliance"
+  ]
+}

@@ -1,0 +1,19 @@
+# Virtualenv
+.venv*
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Pytest cache
+.pytest_cache/
+
+# Logs
+logs/
+*.log
+
+# Build / dist
+build/
+dist/
+*.egg-info/
