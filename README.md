@@ -302,10 +302,8 @@ See: `docs/PAPER_DRAFT_EN.md` for full explanation.
 # 🔭 **8. Future Research Directions**
 This project directly inspired several more promising lines of work:
 
-### **1. BinaryLLM Protocol**
-Binary latent representations for ultra-low-energy inference.
 
-### **2. Neuro-Symbolic Concept Generator**
+### ** 1. Neuro-Symbolic Concept Generator**
 Generate abstract mathematical propositions → verify with Z3.
 
 ### **3. Fractal Reasoning Engine**
