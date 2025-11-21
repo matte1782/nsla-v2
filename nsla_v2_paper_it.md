@@ -257,3 +257,69 @@ Il progetto rimane come riferimento per future esplorazioni.
 10. Ringraziamenti
 
 Questo progetto è stato sviluppato da Matteo Panzeri, con il supporto critico di strumenti di reasoning avanzati basati su LLM, usati in modo responsabile per accelerare ideazione e analisi.
+
+---
+
+# Appendice A: Struttura della Repository
+
+La repository NSLA-v2 è organizzata come un prototipo di ricerca modulare con chiara separazione delle responsabilità. Di seguito si riporta una panoramica delle directory e dei file principali:
+
+### **Directory Radice**
+- **`README.md`**: Panoramica del progetto, motivazione, sintesi dell'architettura e istruzioni d'uso.
+- **`requirements.txt`**: Dipendenze Python per l'intero progetto.
+- **`benchmark_llm_structured.py`**: Script standalone per il benchmarking delle prestazioni di estrazione strutturata tramite LLM.
+- **`test_*.py`**: File di test standalone per il testing isolato di componenti (client LLM, prompt loader).
+- **`tmp_*.py`**: Script di utilità temporanei per debugging e ispezione.
+
+### **`app/`** — Logica Applicativa Principale
+Contiene i componenti principali della pipeline neuro-simbolica:
+- **DSL e Logica**: `logic_dsl.py`, `models.py`, `models_v2.py` — definizioni del linguaggio specifico di dominio giuridico e modelli di dati.
+- **Estrazione**: `structured_extractor.py` — estrae attori, obblighi e condizioni dal linguaggio naturale.
+- **Traduzione**: `translator.py` — converte il DSL in formule logiche compatibili con Z3.
+- **Normalizzazione**: `canonical_rule_utils.py`, `ontology_utils.py` — garantisce coerenza dei predicati e allineamento dei tipi.
+- **Guardrail**: `guardrail_checker.py` — valida i programmi DSL prima della codifica Z3 per prevenire input malformati.
+- **Pipeline**: `pipeline_v2.py`, `main.py` — orchestra il flusso di ragionamento neuro-simbolico end-to-end.
+- **Runtime**: `judge_runtime.py`, `canonicalizer_runtime.py`, `refinement_runtime.py` — gestisce le diverse fasi della pipeline.
+- **Feedback e Iterazione**: `logic_feedback.py`, `iteration_manager.py`, `history_summarizer.py` — implementa loop di raffinamento.
+- **Spiegazione**: `explanation_synthesizer.py` — genera spiegazioni leggibili dall'umano a partire dagli output del solver.
+- **Utilità**: `llm_client.py`, `prompt_loader.py`, `config.py`, `checker.py`, `preprocessing.py` — infrastruttura di supporto.
+- **Template**: `templates/index.html` — interfaccia web minimale (se applicabile).
+
+### **`tests/`** — Suite di Test Completa
+Contiene test unitari, test di integrazione e validazione end-to-end:
+- **Test dei componenti**: `test_translator_v2.py`, `test_guardrail_checker.py`, `test_logic_feedback.py`, `test_llm_structured.py`, ecc.
+- **Test dei runtime**: `test_judge_runtime.py`, `test_phase2_runtimes.py`, `test_iteration_manager.py`.
+- **Test end-to-end**: `test_end_to_end.py`, `test_phase2_e2e.py`, `test_phase3_e2e.py`.
+- **Casi golden**: `test_nsla_v2_golden_cases.py` — casi di test corretti noti per la validazione.
+- **Test di benchmark**: `test_benchmark_smoke.py` — controlli di prestazioni e correttezza.
+- **Configurazione**: `conftest.py` — fixture pytest condivise e setup.
+
+### **`data/`** — Casi di Benchmark e Risultati
+Archivia casi di test, dati di valutazione e risultati sperimentali:
+- **`cases_dev.json`**, **`cases_dev_subset_1_5.json`**: Micro-scenari giuridici per il benchmarking.
+- **`case_*.json`**: Risposte dei singoli casi di test.
+- **`results_*.csv`**: Risultati sperimentali di diverse fasi e configurazioni della pipeline.
+
+### **`docs/`** — Documentazione Tecnica
+Contiene documenti di progettazione, specifiche e materiali di pianificazione:
+- **`project.md`**, **`piano_operativo_mvp_llm_smt_nsla_matteo_panzeri.md`**: Pianificazione del progetto e note operative.
+- **`nsla_v2/`**: Documentazione tecnica dettagliata che include guide al DSL, walkthrough della pipeline, piani di test, report di fase e note di debugging.
+
+### **`resources/`** — Prompt, Ontologia e Specifiche
+Risorse di supporto per la pipeline:
+- **`prompts/`**: Template di prompt LLM organizzati per fase della pipeline.
+- **`ontology/`**: Definizioni dell'ontologia giuridica per l'estrazione strutturata.
+- **`specs/`**: Documenti di specifica del sistema e walkthrough della pipeline.
+
+### **`scripts/`** — Script di Utilità
+Script standalone per debugging e test manuali:
+- **`inspect_subset_guardrail.py`**, **`manual_sanity.py`**: Strumenti diagnostici per la validazione della pipeline.
+
+### **Rationale Architetturale**
+La struttura della repository riflette i principi di modularità del sistema NSLA-v2:
+- **Separazione delle responsabilità**: estrazione, DSL, traduzione e risoluzione sono isolati.
+- **Testabilità**: ogni componente ha corrispondenti test unitari.
+- **Documentazione**: le decisioni tecniche sono registrate in `docs/`.
+- **Riproducibilità**: benchmark, casi di test e risultati sono versionati.
+
+Tale organizzazione supporta la ricerca iterativa, il debugging e future estensioni.
