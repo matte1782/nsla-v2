@@ -257,3 +257,77 @@ Il progetto rimane come riferimento per future esplorazioni.
 10. Ringraziamenti
 
 Questo progetto è stato sviluppato da Matteo Panzeri, con il supporto critico di strumenti di reasoning avanzati basati su LLM, usati in modo responsabile per accelerare ideazione e analisi.
+
+---
+
+# Appendice A: Struttura della Repository
+
+Il repository **nsla-v2** è organizzato secondo una struttura modulare che separa la logica applicativa, i test, la documentazione, i dati sperimentali e le risorse di configurazione. Di seguito viene presentata una descrizione sintetica dei principali componenti.
+
+## Cartelle Principali
+
+### `app/`
+Contiene l'intera implementazione della pipeline neuro-simbolica. Include:
+- **`structured_extractor.py`**: estrazione strutturata di entità e relazioni dal testo legale.
+- **`logic_dsl.py`**: definizione del DSL (Domain-Specific Language) per la rappresentazione formale di clausole e obblighi.
+- **`translator.py`**: traduttore da DSL a vincoli Z3.
+- **`guardrail_checker.py`**: sistema di validazione che blocca programmi DSL malformati prima della fase di solving.
+- **`pipeline_v2.py`**: orchestrazione della pipeline end-to-end.
+- **`llm_client.py`**: interfaccia verso modelli linguistici di grandi dimensioni (LLM) per l'estrazione e il refinement.
+- **`models.py`, `models_v2.py`**: strutture dati (dataclass, Pydantic) per rappresentare entità, clausole, vincoli.
+- **`canonicalizer_runtime.py`, `refinement_runtime.py`, `judge_runtime.py`**: runtime per fasi specifiche della pipeline (canonicalizzazione, raffinamento, validazione).
+- **`explanation_synthesizer.py`**: sintesi di spiegazioni testuali a partire dai risultati del solver.
+- **`benchmark.py`**: esecuzione di benchmark su dataset di test.
+- **`templates/`**: cartella contenente template HTML per eventuali interfacce grafiche o output formattati.
+
+### `tests/`
+Suite completa di test per validare ogni componente della pipeline:
+- **test unitari** per DSL, traduttore Z3, guardrail, normalizzatore.
+- **test di integrazione** per pipeline end-to-end.
+- **test con casi golden** (scenari legali di riferimento).
+- **test avversariali** per input malformati o ambigui.
+
+La presenza di test rigorosi evidenzia l'approccio metodico e scientifico adottato nel progetto.
+
+### `docs/`
+Documentazione di progetto:
+- **`nsla_v2/`**: sottocartella con documentazione tecnica dettagliata.
+- **`piano_operativo_mvp_llm_smt_nsla_matteo_panzeri.md`**: piano operativo originale del progetto.
+- **`project.md`**, **`project_structure.txt`**: descrizione della struttura e degli obiettivi.
+
+### `data/`
+Contiene i dataset sperimentali e i risultati dei benchmark:
+- **`cases_dev.json`**, **`cases_dev_subset_1_5.json`**: casi di test in formato JSON.
+- **file `case_*.json`**: risposte salvate per singoli casi.
+- **file `results_*.csv`**: risultati di esecuzioni multiple della pipeline, incluse diverse configurazioni e round iterativi (es. `results_subset_phase4_round10.csv`).
+
+Questi dati documentano l'evoluzione sperimentale del sistema attraverso diverse fasi di sviluppo.
+
+### `resources/`
+Risorse di configurazione e input per la pipeline:
+- **`prompts/`**: prompt testuali per guidare i modelli linguistici nelle diverse fasi (estrazione, canonicalizzazione, guardrail, spiegazione).
+  - Sottocartelle `judge/`, `phase3/` per prompt specializzati.
+- **`ontology/`**: ontologie e schemi concettuali per il dominio legale italiano (es. `legal_it_v1.yaml`, documentazione PDF sulla responsabilità contrattuale).
+- **`specs/`**: specifiche tecniche della pipeline e walkthrough del funzionamento (`nsla_v_2_pipeline.md`, `nsla_v_2_pipeline_walkthrough.md`).
+
+### `scripts/`
+Script ausiliari per attività di debugging e ispezione manuale:
+- **`inspect_subset_guardrail.py`**: ispezione di subset di dati con focus sui controlli di guardrail.
+- **`manual_sanity.py`**: test di sanità manuale per verifiche rapide.
+
+### `logs/` (non tracciata)
+Cartella ignorata da Git (vedi `.gitignore`) destinata a contenere log di esecuzione della pipeline. Non è inclusa nel repository per evitare di tracciare file temporanei o sensibili.
+
+## File di Root
+
+- **`nsla_v2_paper_en.md`**, **`nsla_v2_paper_it.md`**: paper di ricerca in inglese e italiano, che descrivono motivazioni, architettura, risultati e conclusioni del progetto.
+- **`README.md`**: panoramica generale del progetto, istruzioni per l'installazione e l'esecuzione.
+- **`requirements.txt`**: dipendenze Python necessarie per eseguire il codice.
+- **`.gitignore`**: specifica file e cartelle da escludere dal version control (es. `venv/`, `__pycache__/`, `logs/`).
+- **`benchmark_llm_structured.py`**: script standalone per eseguire benchmark focalizzati su LLM e estrazione strutturata.
+- **`test_llm_client_standalone.py`**, **`test_prompt_loader_standalone.py`**: test standalone per componenti specifici, eseguibili indipendentemente dalla suite principale.
+- **`tmp_hydrate.py`**, **`tmp_inspect.py`**: script temporanei di utilità per idratazione dati o ispezione rapida.
+
+## Osservazioni Finali
+
+La struttura del repository riflette un approccio ingegneristico maturo e una separazione chiara tra logica applicativa, test, configurazione e documentazione. Anche se il progetto non ha raggiunto l'obiettivo originale di dimostrare l'applicabilità dell'entailment logico al ragionamento legale, l'organizzazione del codice e la completezza della documentazione rendono il repository una risorsa preziosa per ricerche future e per l'analisi critica delle limitazioni dei sistemi neuro-simbolici basati su SMT.
